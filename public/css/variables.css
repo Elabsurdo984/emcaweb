@@ -1,0 +1,65 @@
+/* ==========================================================================
+   Design tokens - EMCA System
+   ========================================================================== */
+:root {
+  /* Colores */
+  --navy-900: #0a1628;
+  --navy-800: #0f2038;
+  --navy-700: #16304f;
+  --navy-600: #1e3f68;
+  --navy-500: #2a5488;
+
+  --electric: #1e90ff;
+  --electric-strong: #0b74e0;
+  --electric-soft: rgba(30, 144, 255, 0.14);
+
+  --white: #ffffff;
+  --gray-50: #f6f8fb;
+  --gray-100: #eef2f7;
+  --gray-200: #dde4ee;
+  --gray-400: #93a2b8;
+  --gray-600: #566274;
+  --gray-800: #263243;
+
+  --success: #16a34a;
+  --error: #dc2626;
+
+  /* Semánticos */
+  --bg: var(--white);
+  --bg-alt: var(--gray-50);
+  --bg-dark: var(--navy-900);
+  --text: var(--gray-800);
+  --text-muted: var(--gray-600);
+  --text-invert: var(--white);
+  --border: var(--gray-200);
+  --accent: var(--electric);
+  --accent-hover: var(--electric-strong);
+
+  /* Tipografía */
+  --font-heading: "Poppins", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* Espaciado */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Radios y sombras */
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(10, 22, 40, 0.06);
+  --shadow: 0 8px 24px rgba(10, 22, 40, 0.08);
+  --shadow-lg: 0 20px 50px rgba(10, 22, 40, 0.16);
+
+  /* Layout */
+  --container: 1140px;
+  --header-h: 72px;
+  --transition: 180ms ease;
+}

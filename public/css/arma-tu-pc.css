@@ -1,0 +1,210 @@
+/* ==========================================================================
+   Configurador "Armá tu PC"
+   ========================================================================== */
+
+.page-head {
+  background: linear-gradient(160deg, var(--navy-900), var(--navy-700));
+  color: var(--text-invert);
+  padding-block: var(--space-8);
+}
+.page-head h1 {
+  color: var(--white);
+  font-size: clamp(2rem, 4.5vw, 3rem);
+}
+.page-head p {
+  margin-top: var(--space-4);
+  color: #c9d7e8;
+  max-width: 62ch;
+}
+
+.disclaimer {
+  margin-top: var(--space-5);
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  background: var(--electric-soft);
+  border: 1px solid rgba(30, 144, 255, 0.4);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+  font-size: 0.9rem;
+  color: #dbe9f8;
+  max-width: 72ch;
+}
+
+/* Tabs ------------------------------------------------------------------- */
+.tabs {
+  display: inline-flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: var(--gray-100);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+.tab {
+  border-radius: 999px;
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-heading);
+  font-size: 0.93rem;
+  color: var(--text-muted);
+  min-height: 44px;
+}
+.tab[aria-selected="true"] {
+  background: var(--navy-900);
+  color: var(--white);
+}
+
+.tabpanel[hidden] {
+  display: none;
+}
+
+/* Formularios del configurador ------------------------------------------ */
+.builder-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .builder-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.panel h2 {
+  font-size: 1.15rem;
+  margin-bottom: var(--space-4);
+}
+
+.uses {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+.use-option {
+  position: relative;
+}
+.use-option input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.use-option span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-size: 0.92rem;
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    color var(--transition);
+}
+.use-option input:checked + span {
+  border-color: var(--accent);
+  background: var(--electric-soft);
+  color: var(--navy-900);
+  font-weight: 500;
+}
+.use-option input:focus-visible + span {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.selects {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* Resultado -------------------------------------------------------------- */
+.build-list {
+  display: grid;
+  gap: var(--space-2);
+}
+.build-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding: var(--space-3) 0;
+  border-bottom: 1px dashed var(--border);
+}
+.build-item__cat {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+.build-item__name {
+  font-size: 0.96rem;
+  color: var(--navy-900);
+}
+.build-item__tier {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.build-item__price {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.totals {
+  margin-top: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
+}
+.totals__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: 0.94rem;
+  color: var(--text-muted);
+}
+.totals__row--main {
+  font-size: 1.2rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--navy-900);
+}
+.diff--under {
+  color: var(--success);
+  font-weight: 600;
+}
+.diff--over {
+  color: var(--error);
+  font-weight: 600;
+}
+
+.result-empty {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.panel__actions {
+  margin-top: var(--space-5);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
