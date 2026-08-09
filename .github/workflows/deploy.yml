@@ -1,10 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy EMCA System
 
 on:
   push:
     branches:
       - main
-
   workflow_dispatch:
 
 permissions:
@@ -21,25 +20,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Descargar código
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Instalar dependencias
         run: npm ci
 
-      - name: Build
+      - name: Crear build
         run: npm run build
 
-      - name: Setup Pages
+      - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Subir archivos
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
@@ -50,10 +49,9 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
-
     needs: build
 
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Publicar página
         id: deployment
         uses: actions/deploy-pages@v4
