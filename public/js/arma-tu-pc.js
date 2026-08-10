@@ -332,6 +332,14 @@ function irAContacto(seleccion, titulo) {
   }
   let currentStepIndex = 0;
 
+  function isComponentCompatible(cat, comp) {
+    if (!comp) return true;
+    const testBuild = { ...build };
+    testBuild[cat] = comp;
+    const { errors } = checkCompatibility(testBuild);
+    return !errors.some(err => (err.cats || []).includes(cat));
+  }
+
   function renderWizard() {
     let html = '';
     
@@ -368,10 +376,11 @@ function irAContacto(seleccion, titulo) {
     html += '<div class="product-grid">';
     
     const dbCat = isStorage2 ? 'storage' : currentCategory;
-    const options = getFilteredOptions(dbCat, build);
+    const options = PC_DB[dbCat] || [];
     
     options.forEach(opt => {
       const idx = PC_DB[dbCat].indexOf(opt);
+      const compatible = isComponentCompatible(currentCategory, opt);
       let specsHtml = '';
       if (dbCat === 'cpu') specsHtml = `${opt.socket} | ${opt.tdp}W`;
       else if (dbCat === 'motherboard') specsHtml = `${opt.socket} | ${opt.chipset}`;
@@ -384,15 +393,20 @@ function irAContacto(seleccion, titulo) {
       else if (dbCat === 'fans') specsHtml = `${opt.size}mm x${opt.quantity}`;
       else if (dbCat === 'wifi') specsHtml = `${opt.interface}`;
       else if (dbCat === 'os') specsHtml = `${opt.type}`;
+
+      const compatBadge = compatible
+        ? '<span class="product-card__badge product-card__badge--ok">✔ Compatible</span>'
+        : '<span class="product-card__badge product-card__badge--error">✖ No compatible</span>';
       
       html += `
-        <div class="product-card">
+        <div class="product-card product-card--${compatible ? 'ok' : 'error'}">
           <div class="product-card__img">
             <img src="${opt.img || ''}" alt="${opt.name}" onerror="this.style.display='none'" />
           </div>
           <div class="product-card__info">
             <div class="product-card__name">${opt.name}</div>
             <div class="product-card__specs">${specsHtml}</div>
+            ${compatBadge}
             <div class="product-card__price">${money(opt.price)}</div>
           </div>
           <button class="btn btn--primary btn--select" data-cat="${currentCategory}" data-idx="${idx}">Seleccionar</button>
@@ -489,7 +503,11 @@ function irAContacto(seleccion, titulo) {
 
   function renderSummary() {
     let html = '<h2>Tu configuración</h2>';
-    
+
+    const { errors } = checkCompatibility(build);
+    const badCats = new Set();
+    errors.forEach(err => (err.cats || []).forEach(c => badCats.add(c)));
+
     let hasAny = false;
     steps.forEach(cat => {
       let info = CATEGORY_INFO[cat];
@@ -499,11 +517,16 @@ function irAContacto(seleccion, titulo) {
       const comp = build[cat];
       if (comp) {
         hasAny = true;
+        const incompatible = badCats.has(cat);
+        const badge = incompatible
+          ? '<span class="sidebar__badge sidebar__badge--error" aria-label="No compatible">✖ No compatible</span>'
+          : '<span class="sidebar__badge sidebar__badge--ok" aria-label="Compatible">✔ Compatible</span>';
         html += `
           <div class="sidebar__item">
             <div class="sidebar__item-info">
               <span class="sidebar__item-cat">${info.label}</span>
               <span class="sidebar__item-name">${comp.name}</span>
+              ${badge}
             </div>
             <span class="sidebar__item-price">${money(comp.price)}</span>
           </div>

@@ -28,6 +28,10 @@ const checkCompatibility = (build) => {
     errors.push({ msg: 'El socket del CPU no coincide con el de la motherboard', cats: ['cpu', 'motherboard'] });
   }
 
+  if (build.cpu && build.motherboard && build.cpu.ramType !== 'DDR4/DDR5' && build.motherboard.ramType !== build.cpu.ramType) {
+    errors.push({ msg: 'El tipo de memoria del CPU no es compatible con la motherboard', cats: ['cpu', 'motherboard'] });
+  }
+
   if (build.ram && build.motherboard && build.ram.type !== build.motherboard.ramType) {
     errors.push({ msg: 'El tipo de memoria RAM no es compatible con la motherboard', cats: ['ram', 'motherboard'] });
   }
@@ -77,44 +81,6 @@ const checkCompatibility = (build) => {
   }
 
   return { errors, warnings, isValid: errors.length === 0 };
-};
-
-/**
- * Filtra las opciones de componentes según la configuración actual.
- * @param {string} category - La categoría a filtrar.
- * @param {Build} build - La configuración actual.
- * @returns {Array<Object>} Opciones filtradas.
- */
-const getFilteredOptions = (category, build) => {
-  const options = PC_DB[category];
-  if (!options) return [];
-
-  if (category === 'motherboard') {
-    return options.filter(mobo => {
-      if (build.cpu) {
-        if (mobo.socket !== build.cpu.socket) return false;
-        if (build.cpu.ramType !== 'DDR4/DDR5' && mobo.ramType !== build.cpu.ramType) return false;
-      }
-      return true;
-    });
-  }
-
-  if (category === 'ram') {
-    return options.filter(r => {
-      if (build.motherboard && r.type !== build.motherboard.ramType) return false;
-      return true;
-    });
-  }
-
-  if (category === 'cooler') {
-    return options.filter(c => {
-      if (c.id === 'cooler-stock') return true; 
-      if (build.cpu && !c.sockets.includes(build.cpu.socket)) return false;
-      return true;
-    });
-  }
-
-  return options;
 };
 
 /**
