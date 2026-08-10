@@ -16,15 +16,15 @@ const CATEGORY_INFO = {
 
 const PC_DB = {
   cpu: [
-    { id: 'cpu-14400f', img: 'public/img/corei514400F.png', name: 'Intel Core i5-14400F', price: 115000, socket: 'LGA1700', tdp: 58, hasIgpu: false, hasCooler: true, ramType: 'DDR4/DDR5' },
-    { id: 'cpu-5600', img: 'public/img/ryzen55600.png', name: 'AMD Ryzen 5 5600', price: 160000, socket: 'AM4', tdp: 65, hasIgpu: false, hasCooler: true, ramType: 'DDR4' },
-    { id: 'cpu-13400f', img: 'public/img/corei513400F.png', name: 'Intel Core i5-13400F', price: 165000, socket: 'LGA1700', tdp: 65, hasIgpu: false, hasCooler: true, ramType: 'DDR4/DDR5' },
-    { id: 'cpu-5600g', img: 'public/img/ryzen55600G.png', name: 'AMD Ryzen 5 5600G', price: 170000, socket: 'AM4', tdp: 65, hasIgpu: true, hasCooler: true, ramType: 'DDR4' },
-    { id: 'cpu-5700g', img: 'public/img/ryzen75700G.png', name: 'AMD Ryzen 7 5700G', price: 230000, socket: 'AM4', tdp: 65, hasIgpu: false, hasCooler: false, ramType: 'DDR4' },
-    { id: 'cpu-7600', img: 'public/img/ryzen57600.png', name: 'AMD Ryzen 5 7600', price: 250000, socket: 'AM5', tdp: 65, hasIgpu: false, hasCooler: true, ramType: 'DDR5' },
-    { id: 'cpu-12400', img: 'public/img/corei512400.png', name: 'Intel Core i5-12400', price: 340000, socket: 'LGA1700', tdp: 125, hasIgpu: false, hasCooler: false, ramType: 'DDR4/DDR5' },
-    { id: 'cpu-7700', img: 'public/img/ryzen77700.png', name: 'AMD Ryzen 7 7700', price: 370000, socket: 'AM5', tdp: 105, hasIgpu: false, hasCooler: false, ramType: 'DDR5' },
-    { id: 'cpu-12100', img: 'public/img/corei312100.png', name: 'Intel Core i3-12100', price: 460000, socket: 'LGA1700', tdp: 125, hasIgpu: false, hasCooler: false, ramType: 'DDR4/DDR5' },
+    { id: 'cpu-14400f', img: 'public/img/cpu/corei514400F.png', name: 'Intel Core i5-14400F', price: 115000, socket: 'LGA1700', tdp: 58, hasIgpu: false, hasCooler: true, ramType: 'DDR4/DDR5' },
+    { id: 'cpu-5600', img: 'public/img/cpu/ryzen55600.png', name: 'AMD Ryzen 5 5600', price: 160000, socket: 'AM4', tdp: 65, hasIgpu: false, hasCooler: true, ramType: 'DDR4' },
+    { id: 'cpu-13400f', img: 'public/img/cpu/corei513400F.png', name: 'Intel Core i5-13400F', price: 165000, socket: 'LGA1700', tdp: 65, hasIgpu: false, hasCooler: true, ramType: 'DDR4/DDR5' },
+    { id: 'cpu-5600g', img: 'public/img/cpu/ryzen55600G.png', name: 'AMD Ryzen 5 5600G', price: 170000, socket: 'AM4', tdp: 65, hasIgpu: true, hasCooler: true, ramType: 'DDR4' },
+    { id: 'cpu-5700g', img: 'public/img/cpu/ryzen75700G.png', name: 'AMD Ryzen 7 5700G', price: 230000, socket: 'AM4', tdp: 65, hasIgpu: false, hasCooler: false, ramType: 'DDR4' },
+    { id: 'cpu-7600', img: 'public/img/cpu/ryzen57600.png', name: 'AMD Ryzen 5 7600', price: 250000, socket: 'AM5', tdp: 65, hasIgpu: false, hasCooler: true, ramType: 'DDR5' },
+    { id: 'cpu-12400', img: 'public/img/cpu/corei512400.png', name: 'Intel Core i5-12400', price: 340000, socket: 'LGA1700', tdp: 125, hasIgpu: false, hasCooler: false, ramType: 'DDR4/DDR5' },
+    { id: 'cpu-7700', img: 'public/img/cpu/ryzen77700.png', name: 'AMD Ryzen 7 7700', price: 370000, socket: 'AM5', tdp: 105, hasIgpu: false, hasCooler: false, ramType: 'DDR5' },
+    { id: 'cpu-12100', img: 'public/img/cpu/corei312100.png', name: 'Intel Core i3-12100', price: 460000, socket: 'LGA1700', tdp: 125, hasIgpu: false, hasCooler: false, ramType: 'DDR4/DDR5' },
   ],
   
   motherboard: [
