@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Editor de componentes | EMCA System</title>
+    <meta name="description" content="Herramienta interna para editar el catálogo de componentes del configurador Armá tu PC." />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="public/favicon.jpeg" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="public/css/reset.css" />
+    <link rel="stylesheet" href="public/css/variables.css" />
+    <link rel="stylesheet" href="public/css/styles.css" />
+    <link rel="stylesheet" href="public/css/editor.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+    <header class="header">
+      <div class="container header__inner">
+        <a class="logo" href="index.html" aria-label="EMCA System - inicio">
+          <span class="logo__mark" aria-hidden="true">EM</span>
+          <span class="logo__text">EMCA System<small>Servicio técnico</small></span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-label="Abrir menú de navegación"
+          aria-expanded="false"
+          aria-controls="nav-principal"
+          data-nav-toggle
+        >
+          <span aria-hidden="true"></span>
+        </button>
+
+        <nav class="header__nav" id="nav-principal" aria-label="Navegación principal">
+          <ul class="nav__list">
+            <li><a class="nav__link" href="index.html">Inicio</a></li>
+            <li><a class="nav__link" href="index.html#servicios">Servicios</a></li>
+            <li><a class="nav__link" href="index.html#precios">Precios</a></li>
+            <li><a class="nav__link" href="arma-tu-pc.html">Armá tu PC</a></li>
+            <li><a class="nav__link" href="index.html#contacto">Contacto</a></li>
+          </ul>
+        </nav>
+
+        <a class="btn btn--primary header__cta" href="index.html#contacto">Pedir presupuesto</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-head">
+        <div class="container">
+          <p class="section__tag" style="color: #9fd0ff">Herramienta interna</p>
+          <h1>Editor de componentes</h1>
+          <p>
+            Cargá, editá o eliminá componentes sin tocar código. Los cambios quedan en memoria:
+            al terminar, descargá el archivo <strong>pc-components-db.js</strong> y reemplazá el
+            existente en <code>public/js/</code>.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="editor">
+            <div class="editor__card editor__row">
+              <div class="field">
+                <label for="cat-select">Categoría</label>
+                <select id="cat-select"></select>
+              </div>
+              <div class="field">
+                <label for="existing-select">Componente existente (para editar o eliminar)</label>
+                <select id="existing-select">
+                  <option value="">— Nuevo componente —</option>
+                </select>
+              </div>
+            </div>
+
+            <form class="editor__card" id="editor-form" novalidate>
+              <h2 id="editor-form-title">Nuevo componente</h2>
+              <div class="editor__fields" id="fields"></div>
+              <div class="editor__row">
+                <button class="btn btn--primary" type="submit">Guardar componente</button>
+                <button class="btn btn--outline" type="button" id="btn-delete">Eliminar seleccionado</button>
+              </div>
+            </form>
+
+            <div class="editor__card">
+              <h2>Código generado</h2>
+              <p class="editor__help">
+                Se genera solo mientras completás el formulario. Puedés copiar el componente, la
+                categoría completa o todo el archivo.
+              </p>
+              <div class="editor__preview">
+                <div>
+                  <label for="preview-item">Componente actual</label>
+                  <textarea id="preview-item" rows="2" readonly></textarea>
+                </div>
+                <div>
+                  <label for="preview-cat">Categoría completa</label>
+                  <textarea id="preview-cat" rows="10" readonly></textarea>
+                </div>
+              </div>
+              <div class="editor__actions">
+                <button class="btn btn--outline" type="button" id="btn-copy-item">Copiar componente</button>
+                <button class="btn btn--outline" type="button" id="btn-copy-cat">Copiar categoría</button>
+                <button class="btn btn--outline" type="button" id="btn-copy-file">Copiar archivo completo</button>
+                <button class="btn btn--primary" type="button" id="btn-download">Descargar pc-components-db.js</button>
+                <button class="btn btn--outline" type="button" id="btn-reset">Restablecer catálogo</button>
+              </div>
+              <p class="editor__msg" id="editor-msg" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__grid">
+          <div>
+            <a class="logo" href="index.html" aria-label="EMCA System - inicio">
+              <span class="logo__mark" aria-hidden="true">EM</span>
+              <span class="logo__text">EMCA System</span>
+            </a>
+            <p>
+              Servicio técnico de computadoras formado por cuatro estudiantes. Reparación, armado,
+              mantenimiento e instalaciones para particulares y pequeñas empresas.
+            </p>
+          </div>
+
+          <nav aria-label="Navegación del pie de página">
+            <h4>Navegación</h4>
+            <ul class="footer__links">
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="index.html#servicios">Servicios</a></li>
+              <li><a href="index.html#precios">Precios</a></li>
+              <li><a href="arma-tu-pc.html">Armá tu PC</a></li>
+              <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+          </nav>
+
+          <div>
+            <h4>Redes</h4>
+            <ul class="footer__links">
+              <li>
+                <a href="https://wa.me/5491124692474" target="_blank" rel="noopener">WhatsApp</a>
+              </li>
+              <li><a href="https://www.facebook.com/profile.php?id=61592787794157" target="_blank" rel="noopener">Facebook</a></li>
+              <li><a href="mailto:systememca@gmail.com">Email</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__bottom">
+          <p>&copy; <span data-year></span> EMCA System. Todos los derechos reservados.</p>
+          <p>Hecho con dedicación en Argentina.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="public/js/main.js" defer></script>
+    <script src="public/js/pc-components-db.js" defer></script>
+    <script src="public/js/editor-componentes.js" defer></script>
+  </body>
+</html>
