@@ -308,7 +308,7 @@ function irAContacto(seleccion, titulo) {
   });
 })();
 
-/* MODO 2: selección manual ------------------------------------------------- */
+/* MODO 2: selección manual (Wizard) ---------------------------------------- */
 (function initManual() {
   const selectorsWrap = document.getElementById("cfg-selectors");
   const summaryWrap = document.getElementById("cfg-summary");
@@ -325,187 +325,154 @@ function irAContacto(seleccion, titulo) {
     cooler: null, fans: null, wifi: null, os: null
   };
   
-  let showStorage2 = false;
+  const steps = [...CATEGORY_ORDER];
+  const storageIdx = steps.indexOf('storage');
+  if (storageIdx !== -1) {
+    steps.splice(storageIdx + 1, 0, 'storage2');
+  }
+  let currentStepIndex = 0;
 
-  function renderSelectors() {
+  function renderWizard() {
     let html = '';
     
-    html += '<h3 class="cfg-section-title">Componentes principales</h3>';
-    
-    let addedOptionalsTitle = false;
-
-    CATEGORY_ORDER.forEach(cat => {
-      const info = CATEGORY_INFO[cat];
-      if (!info) return;
-
-      if (!info.required && info.optional && !addedOptionalsTitle) {
-        html += '<h3 class="cfg-section-title">Componentes opcionales</h3>';
-        addedOptionalsTitle = true;
-      }
-
-      html += renderCategoryCard(cat, build[cat], info);
-
-      if (cat === 'storage') {
-        if (showStorage2) {
-          const s2Info = { ...info, label: 'Almacenamiento secundario', required: false, optional: true };
-          html += renderCategoryCard('storage2', build.storage2, s2Info, true);
-        } else {
-          html += `<button type="button" class="cfg-storage-add" id="btn-add-storage">+ Agregar almacenamiento secundario</button>`;
-        }
-      }
+    // Steps indicator
+    html += '<div class="wizard-steps">';
+    steps.forEach((step, idx) => {
+      let info = CATEGORY_INFO[step];
+      if (step === 'storage2') info = { label: 'Almacenamiento 2' };
+      if (!info) return; // fail-safe
+      
+      let className = 'wizard-step';
+      if (idx === currentStepIndex) className += ' wizard-step--active';
+      else if (build[step]) className += ' wizard-step--completed';
+      
+      html += `<div class="${className}">${info.label}</div>`;
     });
+    html += '</div>';
 
-    selectorsWrap.innerHTML = html;
-
-    // Attach events
-    const selects = selectorsWrap.querySelectorAll('.cfg-category__select');
-    selects.forEach(select => {
-      select.addEventListener('change', (e) => {
-        const cat = e.target.dataset.cat;
-        const val = e.target.value;
-        const componentList = cat === 'storage2' ? PC_DB.storage : PC_DB[cat];
-        
-        const selectedComponent = val !== '' ? componentList[parseInt(val)] : null;
-        updateBuild(cat, selectedComponent);
-      });
-    });
-
-    const addStorageBtn = document.getElementById('btn-add-storage');
-    if (addStorageBtn) {
-      addStorageBtn.addEventListener('click', () => {
-        showStorage2 = true;
-        renderAll();
-      });
+    const currentCategory = steps[currentStepIndex];
+    let info = CATEGORY_INFO[currentCategory];
+    let isStorage2 = false;
+    if (currentCategory === 'storage2') {
+      info = { ...CATEGORY_INFO['storage'], label: 'Almacenamiento secundario', required: false, optional: true };
+      isStorage2 = true;
     }
 
-    const removeStorageBtn = document.getElementById('btn-remove-storage');
-    if (removeStorageBtn) {
-      removeStorageBtn.addEventListener('click', () => {
-        showStorage2 = false;
-        build.storage2 = null;
-        renderAll();
-      });
-    }
-  }
+    html += `
+      <div class="wizard-header">
+        <h3>${info.label}</h3>
+      </div>
+    `;
 
-  function renderCategoryCard(cat, selectedComponent, info, isStorage2 = false) {
-    const isOptional = info.optional || (!info.required && !isStorage2);
-    const catClass = isOptional ? 'cfg-category cfg-category--optional' : 'cfg-category';
+    // Product Grid
+    html += '<div class="product-grid">';
     
-    let badge = '';
-    if (selectedComponent) {
-      badge = '<span class="cfg-category__badge cfg-category__badge--selected">Seleccionado</span>';
-    } else if (info.required) {
-      badge = '<span class="cfg-category__badge cfg-category__badge--empty">Requerido</span>';
-    } else {
-      badge = '<span class="cfg-category__badge cfg-category__badge--optional">Opcional</span>';
-    }
-
-    const dbCat = cat === 'storage2' ? 'storage' : cat;
+    const dbCat = isStorage2 ? 'storage' : currentCategory;
     const options = getFilteredOptions(dbCat, build);
     
-    let optionsHtml = '<option value="">— Elegí un componente —</option>';
     options.forEach(opt => {
       const idx = PC_DB[dbCat].indexOf(opt);
-      const isSelected = selectedComponent && selectedComponent.id === opt.id;
-      optionsHtml += `<option value="${idx}" ${isSelected ? 'selected' : ''}>${opt.name} · ${money(opt.price)}</option>`;
-    });
-
-    let detailsHtml = '';
-    if (selectedComponent) {
-      detailsHtml = `
-        <div class="cfg-category__details">
-          <div class="cfg-category__specs">
-            ${getSpecsHtml(dbCat, selectedComponent)}
+      let specsHtml = '';
+      if (dbCat === 'cpu') specsHtml = `${opt.socket} | ${opt.tdp}W`;
+      else if (dbCat === 'motherboard') specsHtml = `${opt.socket} | ${opt.chipset}`;
+      else if (dbCat === 'ram') specsHtml = `${opt.type} ${opt.speed}MHz`;
+      else if (dbCat === 'gpu') specsHtml = opt.id === 'gpu-none' ? 'Sin gráfica dedicada' : `${opt.tdp}W`;
+      else if (dbCat === 'storage') specsHtml = `${opt.storageType} ${opt.capacity}`;
+      else if (dbCat === 'psu') specsHtml = `${opt.wattage}W ${opt.certification}`;
+      else if (dbCat === 'pccase') specsHtml = `${opt.formFactors ? opt.formFactors.join(', ') : ''}`;
+      else if (dbCat === 'cooler') specsHtml = opt.id === 'cooler-stock' ? 'Cooler de fábrica' : `${opt.type}`;
+      else if (dbCat === 'fans') specsHtml = `${opt.size}mm x${opt.quantity}`;
+      else if (dbCat === 'wifi') specsHtml = `${opt.interface}`;
+      else if (dbCat === 'os') specsHtml = `${opt.type}`;
+      
+      html += `
+        <div class="product-card">
+          <div class="product-card__img">
+            <img src="${opt.img || ''}" alt="${opt.name}" onerror="this.style.display='none'" />
           </div>
-          <div class="cfg-category__price">${money(selectedComponent.price)}</div>
+          <div class="product-card__info">
+            <div class="product-card__name">${opt.name}</div>
+            <div class="product-card__specs">${specsHtml}</div>
+            <div class="product-card__price">${money(opt.price)}</div>
+          </div>
+          <button class="btn btn--primary btn--select" data-cat="${currentCategory}" data-idx="${idx}">Seleccionar</button>
+        </div>
+      `;
+    });
+    
+    // Add "Ninguno" option if optional
+    if (!info.required) {
+       html += `
+        <div class="product-card">
+          <div class="product-card__img">
+          </div>
+          <div class="product-card__info">
+            <div class="product-card__name">Ninguno / Saltar</div>
+            <div class="product-card__specs">No agregar este componente</div>
+            <div class="product-card__price">$0</div>
+          </div>
+          <button class="btn btn--outline btn--select" data-cat="${currentCategory}" data-idx="-1">Saltar paso</button>
         </div>
       `;
     }
 
-    const headerExtra = isStorage2 ? `<button type="button" class="cfg-storage-remove" id="btn-remove-storage" aria-label="Quitar">✖</button>` : '';
+    html += '</div>'; // close product-grid
 
-    return `
-      <div class="${catClass}">
-        <div class="cfg-category__header">
-          <span class="cfg-category__icon">${info.icon}</span>
-          <span class="cfg-category__label">${info.label}</span>
-          ${headerExtra}
-          <div class="cfg-category__spacer"></div>
-          ${badge}
-        </div>
-        <select class="cfg-category__select" data-cat="${cat}">
-          ${optionsHtml}
-        </select>
-        ${detailsHtml}
-      </div>
-    `;
-  }
+    // Nav
+    html += '<div class="wizard-nav">';
+    if (currentStepIndex > 0) {
+      html += `<button class="btn btn--outline" id="btn-prev">Volver atrás</button>`;
+    } else {
+      html += `<div></div>`;
+    }
+    
+    if (!info.required) {
+      html += `<button class="btn btn--outline" id="btn-skip">Saltar paso</button>`;
+    } else {
+      html += `<div></div>`;
+    }
+    html += '</div>';
 
-  function getSpecsHtml(cat, comp) {
-    const specs = [];
-    if (cat === 'cpu') {
-      specs.push(['Socket', comp.socket]);
-      specs.push(['TDP', comp.tdp + 'W']);
-      specs.push(['Gráficos', comp.hasIgpu ? 'Sí' : 'No']);
-      specs.push(['Cooler inc.', comp.hasCooler ? 'Sí' : 'No']);
-      specs.push(['RAM', comp.ramType]);
-    } else if (cat === 'motherboard') {
-      specs.push(['Socket', comp.socket]);
-      specs.push(['Chipset', comp.chipset]);
-      specs.push(['RAM', comp.ramType]);
-      specs.push(['Formato', comp.formFactor]);
-      specs.push(['M.2', comp.m2Slots]);
-      specs.push(['WiFi', comp.hasWifi ? 'Sí' : 'No']);
-    } else if (cat === 'ram') {
-      specs.push(['Tipo', comp.type]);
-      specs.push(['Velocidad', comp.speed + ' MHz']);
-      specs.push(['Capacidad', comp.capacity + ' GB']);
-      specs.push(['Módulos', comp.modules]);
-    } else if (cat === 'gpu') {
-      if (comp.id !== 'gpu-none') {
-        specs.push(['TDP', comp.tdp + 'W']);
-        specs.push(['Largo', comp.length + ' mm']);
-        specs.push(['Conectores', comp.powerConnectors]);
-      } else {
-        specs.push(['Info', 'Sin placa de video dedicada']);
-      }
-    } else if (cat === 'storage') {
-      specs.push(['Tipo', comp.storageType]);
-      specs.push(['Capacidad', comp.capacity]);
-      specs.push(['Interfaz', comp.interface]);
-    } else if (cat === 'psu') {
-      specs.push(['Potencia', comp.wattage + 'W']);
-      specs.push(['Cert.', comp.certification]);
-      specs.push(['Modular', comp.modular ? 'Sí' : 'No']);
-    } else if (cat === 'pccase') {
-      specs.push(['Formatos', comp.formFactors.join(', ')]);
-      specs.push(['Max GPU', comp.maxGpuLength + ' mm']);
-      specs.push(['Fans inc.', comp.includedFans]);
-    } else if (cat === 'cooler') {
-      if (comp.id !== 'cooler-stock') {
-        specs.push(['Sockets', comp.sockets.join(', ')]);
-        specs.push(['Max TDP', comp.maxTdp + 'W']);
-        specs.push(['Tipo', comp.type]);
-      } else {
-        specs.push(['Info', 'Cooler de fábrica incluido con el procesador']);
-      }
-    } else if (cat === 'fans') {
-      specs.push(['Tamaño', comp.size + ' mm']);
-      specs.push(['Cantidad', comp.quantity]);
-    } else if (cat === 'wifi') {
-      specs.push(['Interfaz', comp.interface]);
-      specs.push(['Info', comp.features]);
-    } else if (cat === 'os') {
-      specs.push(['Licencia', comp.type]);
+    selectorsWrap.innerHTML = html;
+
+    // Events
+    const selectBtns = selectorsWrap.querySelectorAll('.btn--select');
+    selectBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const cat = e.target.dataset.cat;
+        const val = parseInt(e.target.dataset.idx);
+        
+        const dbC = cat === 'storage2' ? 'storage' : cat;
+        const selectedComponent = val >= 0 ? PC_DB[dbC][val] : null;
+        
+        updateBuild(cat, selectedComponent);
+        if (currentStepIndex < steps.length - 1) {
+          currentStepIndex++;
+        }
+        renderAll();
+      });
+    });
+
+    const btnPrev = document.getElementById('btn-prev');
+    if (btnPrev) {
+      btnPrev.addEventListener('click', () => {
+        if (currentStepIndex > 0) {
+          currentStepIndex--;
+          renderAll();
+        }
+      });
     }
 
-    return specs.map(([k, v]) => `
-      <div class="cfg-spec">
-        <span class="cfg-spec-label">${k}</span>
-        <span class="cfg-spec-value">${v}</span>
-      </div>
-    `).join('');
+    const btnSkip = document.getElementById('btn-skip');
+    if (btnSkip) {
+      btnSkip.addEventListener('click', () => {
+        updateBuild(currentCategory, null);
+        if (currentStepIndex < steps.length - 1) {
+          currentStepIndex++;
+          renderAll();
+        }
+      });
+    }
   }
 
   function updateBuild(cat, component) {
@@ -518,16 +485,17 @@ function irAContacto(seleccion, titulo) {
     } else if (cat === 'motherboard') {
       build.ram = null;
     }
-
-    renderAll();
   }
 
   function renderSummary() {
     let html = '<h2>Tu configuración</h2>';
     
     let hasAny = false;
-    CATEGORY_ORDER.forEach(cat => {
-      const info = CATEGORY_INFO[cat];
+    steps.forEach(cat => {
+      let info = CATEGORY_INFO[cat];
+      if (cat === 'storage2') info = { label: 'Almacenamiento sec.' };
+      if (!info) return;
+      
       const comp = build[cat];
       if (comp) {
         hasAny = true;
@@ -540,7 +508,7 @@ function irAContacto(seleccion, titulo) {
             <span class="sidebar__item-price">${money(comp.price)}</span>
           </div>
         `;
-      } else if (info.required) {
+      } else if (info && info.required) {
         html += `
           <div class="sidebar__item">
             <div class="sidebar__item-info">
@@ -552,18 +520,6 @@ function irAContacto(seleccion, titulo) {
         `;
       }
     });
-
-    if (build.storage2) {
-      html += `
-        <div class="sidebar__item">
-          <div class="sidebar__item-info">
-            <span class="sidebar__item-cat">Almacenamiento secundario</span>
-            <span class="sidebar__item-name">${build.storage2.name}</span>
-          </div>
-          <span class="sidebar__item-price">${money(build.storage2.price)}</span>
-        </div>
-      `;
-    }
 
     if (!hasAny) {
       html += '<p class="sidebar__empty">Empezá eligiendo un procesador.</p>';
@@ -623,52 +579,20 @@ function irAContacto(seleccion, titulo) {
   }
 
   function renderAll() {
-    renderSelectors();
+    renderWizard();
     renderSummary();
     renderCompat();
     renderTotal();
-    
-    // Update badge styling in selectors based on compat errors
-    const { errors, warnings } = checkCompatibility(build);
-    errors.forEach(err => {
-      err.cats.forEach(cat => {
-        if (cat === 'storage2' && !showStorage2) return;
-        const sel = selectorsWrap.querySelector(`[data-cat="${cat}"]`);
-        if (sel) {
-          const badge = sel.parentElement.querySelector('.cfg-category__badge');
-          if (badge) {
-            badge.className = 'cfg-category__badge cfg-category__badge--error';
-            badge.textContent = 'Error';
-          }
-        }
-      });
-    });
-    warnings.forEach(warn => {
-      warn.cats.forEach(cat => {
-        if (cat === 'storage2' && !showStorage2) return;
-        const sel = selectorsWrap.querySelector(`[data-cat="${cat}"]`);
-        if (sel) {
-          const badge = sel.parentElement.querySelector('.cfg-category__badge');
-          // Only overwrite if it's not already an error
-          if (badge && !badge.classList.contains('cfg-category__badge--error')) {
-            badge.className = 'cfg-category__badge cfg-category__badge--warning';
-            badge.textContent = 'Aviso';
-          }
-        }
-      });
-    });
   }
 
   btnConsultar.addEventListener('click', () => {
     let text = 'Hola, quiero consultar este armado que configuré:\\n\\n';
-    CATEGORY_ORDER.forEach(cat => {
+    steps.forEach(cat => {
       if (build[cat]) {
-        text += `- ${CATEGORY_INFO[cat].label}: ${build[cat].name}\\n`;
+        let label = cat === 'storage2' ? 'Almacenamiento secundario' : CATEGORY_INFO[cat].label;
+        text += `- ${label}: ${build[cat].name}\\n`;
       }
     });
-    if (build.storage2) {
-      text += `- Almacenamiento secundario: ${build.storage2.name}\\n`;
-    }
     
     let total = 0;
     Object.values(build).forEach(comp => {
@@ -682,9 +606,10 @@ function irAContacto(seleccion, titulo) {
 
   btnReset.addEventListener('click', () => {
     Object.keys(build).forEach(k => build[k] = null);
-    showStorage2 = false;
+    currentStepIndex = 0;
     renderAll();
   });
 
   renderAll();
 })();
+
