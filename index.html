@@ -62,7 +62,7 @@
           <ul class="nav__list">
             <li><a class="nav__link is-active" href="index.html" aria-current="page">Inicio</a></li>
             <li><a class="nav__link" href="#servicios">Servicios</a></li>
-            <li><a class="nav__link" href="#trabajos">Trabajos</a></li>
+            <li><a class="nav__link" href="#precios">Precios</a></li>
             <li><a class="nav__link" href="arma-tu-pc.html">Armá tu PC</a></li>
             <li><a class="nav__link" href="#contacto">Contacto</a></li>
           </ul>
@@ -200,46 +200,65 @@
         </div>
       </section>
 
-      <!-- 3. TRABAJOS REALIZADOS -->
-      <section class="section section--alt" id="trabajos" aria-labelledby="trabajos-title">
+      <!-- 3. PRECIOS ORIENTATIVOS -->
+      <section class="section section--alt" id="precios" aria-labelledby="precios-title">
         <div class="container">
           <div class="section__head">
-            <p class="section__tag">Trabajos realizados</p>
-            <h2 id="trabajos-title">Algunos equipos que pasaron por nuestras manos</h2>
-            <p>Espacios reservados para las fotos reales de nuestros trabajos.</p>
+            <p class="section__tag">Precios orientativos</p>
+            <h2 id="precios-title">Una idea de cuánto sale cada servicio</h2>
+            <p>
+              Valores de referencia en pesos argentinos. El presupuesto final se confirma después
+              del diagnóstico, antes de tocar el equipo.
+            </p>
           </div>
 
-          <ul class="works">
-            <!-- Reemplazar cada .work__ph por <img src="..." alt="descripción del trabajo"> -->
-            <li class="work">
-              <div class="work__ph"><span>Foto próximamente</span></div>
-              <div class="work__body">
-                <h3>Armado gamer a medida</h3>
-                <p>Equipo ensamblado con cableado prolijo y testeo de temperaturas.</p>
+          <!-- Precios de referencia: ajustar montos según corresponda. No es necesario listar todos los servicios. -->
+          <ul class="prices">
+            <li class="price">
+              <div class="price__head">
+                <h3>Diagnóstico</h3>
+                <span class="price__tag">Desde $8.000</span>
               </div>
+              <p>Revisión completa de hardware y software, con informe claro del problema.</p>
             </li>
-            <li class="work">
-              <div class="work__ph"><span>Foto próximamente</span></div>
-              <div class="work__body">
-                <h3>Notebook con cambio de pantalla</h3>
-                <p>Reemplazo de panel y revisión general del equipo.</p>
+
+            <li class="price">
+              <div class="price__head">
+                <h3>Limpieza + pasta térmica</h3>
+                <span class="price__tag">Desde $12.000</span>
               </div>
+              <p>Limpieza interna, cambio de pasta térmica y control de temperaturas.</p>
             </li>
-            <li class="work">
-              <div class="work__ph"><span>Foto próximamente</span></div>
-              <div class="work__body">
-                <h3>Mantenimiento de oficina</h3>
-                <p>Limpieza y puesta a punto de varios puestos de trabajo.</p>
+
+            <li class="price">
+              <div class="price__head">
+                <h3>Instalación de sistema operativo</h3>
+                <span class="price__tag">Desde $10.000</span>
               </div>
+              <p>Windows o Linux, drivers y programas básicos listos para usar.</p>
             </li>
-            <li class="work">
-              <div class="work__ph"><span>Foto próximamente</span></div>
-              <div class="work__body">
-                <h3>Upgrade a SSD</h3>
-                <p>Migración de datos y arranque notablemente más rápido.</p>
+
+            <li class="price">
+              <div class="price__head">
+                <h3>Eliminación de virus y malware</h3>
+                <span class="price__tag">Desde $9.000</span>
               </div>
+              <p>Limpieza de amenazas y optimización del arranque del equipo.</p>
+            </li>
+
+            <li class="price">
+              <div class="price__head">
+                <h3>Armado de PC (mano de obra)</h3>
+                <span class="price__tag">Desde $15.000</span>
+              </div>
+              <p>Ensamblado, cableado prolijo y testeo. Los componentes se cotizan aparte.</p>
             </li>
           </ul>
+
+          <p class="prices__note">
+            * Precios orientativos. Pueden variar según el modelo del equipo y la complejidad del
+            trabajo. Para los demás servicios te pasamos un presupuesto a medida sin cargo.
+          </p>
         </div>
       </section>
 
@@ -343,7 +362,7 @@
             <ul class="footer__links">
               <li><a href="index.html">Inicio</a></li>
               <li><a href="#servicios">Servicios</a></li>
-              <li><a href="#trabajos">Trabajos</a></li>
+              <li><a href="#precios">Precios</a></li>
               <li><a href="arma-tu-pc.html">Armá tu PC</a></li>
               <li><a href="#contacto">Contacto</a></li>
             </ul>

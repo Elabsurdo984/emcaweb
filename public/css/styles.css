@@ -396,41 +396,57 @@ main {
   background: var(--accent);
 }
 
-/* Trabajos --------------------------------------------------------------- */
-.works {
+/* Precios ------------------------------------------------------------------ */
+.prices {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--space-5);
 }
-.work {
+.price {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  overflow: hidden;
+  padding: var(--space-5);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
 }
-.work__ph {
-  aspect-ratio: 4 / 3;
-  display: grid;
-  place-items: center;
+.price:hover {
+  border-color: rgba(30, 144, 255, 0.5);
+  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+}
+.price__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--space-2);
-  background:
-    linear-gradient(135deg, var(--gray-100), var(--white)),
-    var(--gray-100);
-  color: var(--gray-400);
-  border-bottom: 1px solid var(--border);
-  text-align: center;
-  font-size: 0.82rem;
 }
-.work__body {
-  padding: var(--space-4) var(--space-5) var(--space-5);
-}
-.work__body h3 {
+.price__head h3 {
   font-size: 1rem;
 }
-.work__body p {
+.price__tag {
+  flex-shrink: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--accent);
+  background: var(--electric-soft);
+  border-radius: 999px;
+  padding: 0.3em 0.8em;
+  white-space: nowrap;
+}
+.price p {
   font-size: 0.9rem;
   color: var(--text-muted);
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
+}
+.prices__note {
+  margin-top: var(--space-5);
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 /* Contacto --------------------------------------------------------------- */
