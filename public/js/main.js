@@ -9,7 +9,7 @@
    El mail de destino (systememca@gmail.com) se configura en el dashboard
    de Formspree, NO acá en el código.
    ----------------------------------------------------------------------- */
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/TU_ID_DE_FORMSPREE";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrpzpkqe";
 
 /* Año dinámico del footer -------------------------------------------------- */
 document.querySelectorAll("[data-year]").forEach((el) => {
