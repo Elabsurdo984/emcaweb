@@ -310,50 +310,381 @@ function irAContacto(seleccion, titulo) {
 
 /* MODO 2: selección manual ------------------------------------------------- */
 (function initManual() {
-  const wrap = document.getElementById("manual-selects");
-  const result = document.getElementById("manual-result");
-  if (!wrap || !result) return;
+  const selectorsWrap = document.getElementById("cfg-selectors");
+  const summaryWrap = document.getElementById("cfg-summary");
+  const compatWrap = document.getElementById("cfg-compat");
+  const totalWrap = document.querySelector("#cfg-total .sidebar__price");
+  const btnConsultar = document.getElementById("cfg-consultar");
+  const btnReset = document.getElementById("cfg-reset");
 
-  wrap.innerHTML = CATEGORIAS.map(
-    (cat) => `
-      <div class="field">
-        <label for="sel-${cat}">${COMPONENTES[cat].label}</label>
-        <select id="sel-${cat}" data-cat="${cat}">
-          ${COMPONENTES[cat].niveles
-            .map(
-              (n, i) =>
-                `<option value="${i}" ${i === 1 ? "selected" : ""}>${NOMBRE_NIVEL[i]} — ${n.name} · ${money(n.price)}</option>`,
-            )
-            .join("")}
+  if (!selectorsWrap) return;
+
+  const build = {
+    cpu: null, motherboard: null, ram: null, gpu: null,
+    storage: null, storage2: null, psu: null, pccase: null,
+    cooler: null, fans: null, wifi: null, os: null
+  };
+  
+  let showStorage2 = false;
+
+  function renderSelectors() {
+    let html = '';
+    
+    html += '<h3 class="cfg-section-title">Componentes principales</h3>';
+    
+    let addedOptionalsTitle = false;
+
+    CATEGORY_ORDER.forEach(cat => {
+      const info = CATEGORY_INFO[cat];
+      if (!info) return;
+
+      if (!info.required && info.optional && !addedOptionalsTitle) {
+        html += '<h3 class="cfg-section-title">Componentes opcionales</h3>';
+        addedOptionalsTitle = true;
+      }
+
+      html += renderCategoryCard(cat, build[cat], info);
+
+      if (cat === 'storage') {
+        if (showStorage2) {
+          const s2Info = { ...info, label: 'Almacenamiento secundario', required: false, optional: true };
+          html += renderCategoryCard('storage2', build.storage2, s2Info, true);
+        } else {
+          html += `<button type="button" class="cfg-storage-add" id="btn-add-storage">+ Agregar almacenamiento secundario</button>`;
+        }
+      }
+    });
+
+    selectorsWrap.innerHTML = html;
+
+    // Attach events
+    const selects = selectorsWrap.querySelectorAll('.cfg-category__select');
+    selects.forEach(select => {
+      select.addEventListener('change', (e) => {
+        const cat = e.target.dataset.cat;
+        const val = e.target.value;
+        const componentList = cat === 'storage2' ? PC_DB.storage : PC_DB[cat];
+        
+        const selectedComponent = val !== '' ? componentList[parseInt(val)] : null;
+        updateBuild(cat, selectedComponent);
+      });
+    });
+
+    const addStorageBtn = document.getElementById('btn-add-storage');
+    if (addStorageBtn) {
+      addStorageBtn.addEventListener('click', () => {
+        showStorage2 = true;
+        renderAll();
+      });
+    }
+
+    const removeStorageBtn = document.getElementById('btn-remove-storage');
+    if (removeStorageBtn) {
+      removeStorageBtn.addEventListener('click', () => {
+        showStorage2 = false;
+        build.storage2 = null;
+        renderAll();
+      });
+    }
+  }
+
+  function renderCategoryCard(cat, selectedComponent, info, isStorage2 = false) {
+    const isOptional = info.optional || (!info.required && !isStorage2);
+    const catClass = isOptional ? 'cfg-category cfg-category--optional' : 'cfg-category';
+    
+    let badge = '';
+    if (selectedComponent) {
+      badge = '<span class="cfg-category__badge cfg-category__badge--selected">Seleccionado</span>';
+    } else if (info.required) {
+      badge = '<span class="cfg-category__badge cfg-category__badge--empty">Requerido</span>';
+    } else {
+      badge = '<span class="cfg-category__badge cfg-category__badge--optional">Opcional</span>';
+    }
+
+    const dbCat = cat === 'storage2' ? 'storage' : cat;
+    const options = getFilteredOptions(dbCat, build);
+    
+    let optionsHtml = '<option value="">— Elegí un componente —</option>';
+    options.forEach(opt => {
+      const idx = PC_DB[dbCat].indexOf(opt);
+      const isSelected = selectedComponent && selectedComponent.id === opt.id;
+      optionsHtml += `<option value="${idx}" ${isSelected ? 'selected' : ''}>${opt.name} · ${money(opt.price)}</option>`;
+    });
+
+    let detailsHtml = '';
+    if (selectedComponent) {
+      detailsHtml = `
+        <div class="cfg-category__details">
+          <div class="cfg-category__specs">
+            ${getSpecsHtml(dbCat, selectedComponent)}
+          </div>
+          <div class="cfg-category__price">${money(selectedComponent.price)}</div>
+        </div>
+      `;
+    }
+
+    const headerExtra = isStorage2 ? `<button type="button" class="cfg-storage-remove" id="btn-remove-storage" aria-label="Quitar">✖</button>` : '';
+
+    return `
+      <div class="${catClass}">
+        <div class="cfg-category__header">
+          <span class="cfg-category__icon">${info.icon}</span>
+          <span class="cfg-category__label">${info.label}</span>
+          ${headerExtra}
+          <div class="cfg-category__spacer"></div>
+          ${badge}
+        </div>
+        <select class="cfg-category__select" data-cat="${cat}">
+          ${optionsHtml}
         </select>
-      </div>`,
-  ).join("");
-
-  const selects = Array.from(wrap.querySelectorAll("select"));
-
-  function seleccionActual() {
-    const sel = {};
-    selects.forEach((s) => {
-      sel[s.dataset.cat] = Number(s.value);
-    });
-    return sel;
+        ${detailsHtml}
+      </div>
+    `;
   }
 
-  function render() {
-    const seleccion = seleccionActual();
-    result.innerHTML = `
-      <h2>Tu armado</h2>
-      ${renderArmado(seleccion)}
-      <div class="panel__actions">
-        <button class="btn btn--primary" type="button" id="manual-consultar">
-          Consultar este armado
-        </button>
-      </div>`;
-    document.getElementById("manual-consultar").addEventListener("click", () => {
-      irAContacto(seleccion, "Hola, quiero consultar este armado que configuré:");
+  function getSpecsHtml(cat, comp) {
+    const specs = [];
+    if (cat === 'cpu') {
+      specs.push(['Socket', comp.socket]);
+      specs.push(['TDP', comp.tdp + 'W']);
+      specs.push(['Gráficos', comp.hasIgpu ? 'Sí' : 'No']);
+      specs.push(['Cooler inc.', comp.hasCooler ? 'Sí' : 'No']);
+      specs.push(['RAM', comp.ramType]);
+    } else if (cat === 'motherboard') {
+      specs.push(['Socket', comp.socket]);
+      specs.push(['Chipset', comp.chipset]);
+      specs.push(['RAM', comp.ramType]);
+      specs.push(['Formato', comp.formFactor]);
+      specs.push(['M.2', comp.m2Slots]);
+      specs.push(['WiFi', comp.hasWifi ? 'Sí' : 'No']);
+    } else if (cat === 'ram') {
+      specs.push(['Tipo', comp.type]);
+      specs.push(['Velocidad', comp.speed + ' MHz']);
+      specs.push(['Capacidad', comp.capacity + ' GB']);
+      specs.push(['Módulos', comp.modules]);
+    } else if (cat === 'gpu') {
+      if (comp.id !== 'gpu-none') {
+        specs.push(['TDP', comp.tdp + 'W']);
+        specs.push(['Largo', comp.length + ' mm']);
+        specs.push(['Conectores', comp.powerConnectors]);
+      } else {
+        specs.push(['Info', 'Sin placa de video dedicada']);
+      }
+    } else if (cat === 'storage') {
+      specs.push(['Tipo', comp.storageType]);
+      specs.push(['Capacidad', comp.capacity]);
+      specs.push(['Interfaz', comp.interface]);
+    } else if (cat === 'psu') {
+      specs.push(['Potencia', comp.wattage + 'W']);
+      specs.push(['Cert.', comp.certification]);
+      specs.push(['Modular', comp.modular ? 'Sí' : 'No']);
+    } else if (cat === 'pccase') {
+      specs.push(['Formatos', comp.formFactors.join(', ')]);
+      specs.push(['Max GPU', comp.maxGpuLength + ' mm']);
+      specs.push(['Fans inc.', comp.includedFans]);
+    } else if (cat === 'cooler') {
+      if (comp.id !== 'cooler-stock') {
+        specs.push(['Sockets', comp.sockets.join(', ')]);
+        specs.push(['Max TDP', comp.maxTdp + 'W']);
+        specs.push(['Tipo', comp.type]);
+      } else {
+        specs.push(['Info', 'Cooler de fábrica incluido con el procesador']);
+      }
+    } else if (cat === 'fans') {
+      specs.push(['Tamaño', comp.size + ' mm']);
+      specs.push(['Cantidad', comp.quantity]);
+    } else if (cat === 'wifi') {
+      specs.push(['Interfaz', comp.interface]);
+      specs.push(['Info', comp.features]);
+    } else if (cat === 'os') {
+      specs.push(['Licencia', comp.type]);
+    }
+
+    return specs.map(([k, v]) => `
+      <div class="cfg-spec">
+        <span class="cfg-spec-label">${k}</span>
+        <span class="cfg-spec-value">${v}</span>
+      </div>
+    `).join('');
+  }
+
+  function updateBuild(cat, component) {
+    build[cat] = component;
+
+    if (cat === 'cpu') {
+      build.motherboard = null;
+      build.ram = null;
+      build.cooler = null;
+    } else if (cat === 'motherboard') {
+      build.ram = null;
+    }
+
+    renderAll();
+  }
+
+  function renderSummary() {
+    let html = '<h2>Tu configuración</h2>';
+    
+    let hasAny = false;
+    CATEGORY_ORDER.forEach(cat => {
+      const info = CATEGORY_INFO[cat];
+      const comp = build[cat];
+      if (comp) {
+        hasAny = true;
+        html += `
+          <div class="sidebar__item">
+            <div class="sidebar__item-info">
+              <span class="sidebar__item-cat">${info.label}</span>
+              <span class="sidebar__item-name">${comp.name}</span>
+            </div>
+            <span class="sidebar__item-price">${money(comp.price)}</span>
+          </div>
+        `;
+      } else if (info.required) {
+        html += `
+          <div class="sidebar__item">
+            <div class="sidebar__item-info">
+              <span class="sidebar__item-cat">${info.label}</span>
+              <span class="sidebar__item-name" style="color: var(--text-muted)">—</span>
+            </div>
+            <span class="sidebar__item-price"></span>
+          </div>
+        `;
+      }
+    });
+
+    if (build.storage2) {
+      html += `
+        <div class="sidebar__item">
+          <div class="sidebar__item-info">
+            <span class="sidebar__item-cat">Almacenamiento secundario</span>
+            <span class="sidebar__item-name">${build.storage2.name}</span>
+          </div>
+          <span class="sidebar__item-price">${money(build.storage2.price)}</span>
+        </div>
+      `;
+    }
+
+    if (!hasAny) {
+      html += '<p class="sidebar__empty">Empezá eligiendo un procesador.</p>';
+    }
+
+    summaryWrap.innerHTML = html;
+  }
+
+  function renderCompat() {
+    const hasAnyComp = Object.values(build).some(c => c !== null);
+    if (!hasAnyComp) {
+      compatWrap.innerHTML = '';
+      return;
+    }
+
+    const { errors, warnings, isValid } = checkCompatibility(build);
+    let html = '';
+
+    if (errors.length > 0) {
+      html += `<div class="compat-status compat-status--error">❌ Incompatible</div>`;
+      errors.forEach(err => {
+        html += `<div class="compat-item compat-item--error">✖ ${err.msg}</div>`;
+      });
+    }
+
+    if (warnings.length > 0) {
+      if (errors.length === 0) {
+        html += `<div class="compat-status compat-status--warning">⚠️ Atención</div>`;
+      }
+      warnings.forEach(warn => {
+        html += `<div class="compat-item compat-item--warning">⚠ ${warn.msg}</div>`;
+      });
+    }
+
+    if (isValid && errors.length === 0 && warnings.length === 0 && build.cpu) {
+      html += `<div class="compat-status compat-status--ok">✅ Todo compatible</div>`;
+    }
+
+    // Wattage
+    if (build.cpu || build.gpu) {
+      const watts = estimatePowerConsumption(build);
+      html += `<div class="sidebar__wattage">Consumo estimado: <strong>${watts}W</strong></div>`;
+    }
+
+    compatWrap.innerHTML = html;
+  }
+
+  function renderTotal() {
+    let total = 0;
+    Object.values(build).forEach(comp => {
+      if (comp) total += comp.price;
+    });
+    totalWrap.textContent = money(total);
+
+    const isComplete = checkCompatibility(build).isValid;
+    btnConsultar.disabled = !isComplete;
+  }
+
+  function renderAll() {
+    renderSelectors();
+    renderSummary();
+    renderCompat();
+    renderTotal();
+    
+    // Update badge styling in selectors based on compat errors
+    const { errors, warnings } = checkCompatibility(build);
+    errors.forEach(err => {
+      err.cats.forEach(cat => {
+        if (cat === 'storage2' && !showStorage2) return;
+        const sel = selectorsWrap.querySelector(`[data-cat="${cat}"]`);
+        if (sel) {
+          const badge = sel.parentElement.querySelector('.cfg-category__badge');
+          if (badge) {
+            badge.className = 'cfg-category__badge cfg-category__badge--error';
+            badge.textContent = 'Error';
+          }
+        }
+      });
+    });
+    warnings.forEach(warn => {
+      warn.cats.forEach(cat => {
+        if (cat === 'storage2' && !showStorage2) return;
+        const sel = selectorsWrap.querySelector(`[data-cat="${cat}"]`);
+        if (sel) {
+          const badge = sel.parentElement.querySelector('.cfg-category__badge');
+          // Only overwrite if it's not already an error
+          if (badge && !badge.classList.contains('cfg-category__badge--error')) {
+            badge.className = 'cfg-category__badge cfg-category__badge--warning';
+            badge.textContent = 'Aviso';
+          }
+        }
+      });
     });
   }
 
-  selects.forEach((s) => s.addEventListener("change", render));
-  render();
+  btnConsultar.addEventListener('click', () => {
+    let text = 'Hola, quiero consultar este armado que configuré:\\n\\n';
+    CATEGORY_ORDER.forEach(cat => {
+      if (build[cat]) {
+        text += `- ${CATEGORY_INFO[cat].label}: ${build[cat].name}\\n`;
+      }
+    });
+    if (build.storage2) {
+      text += `- Almacenamiento secundario: ${build.storage2.name}\\n`;
+    }
+    
+    let total = 0;
+    Object.values(build).forEach(comp => {
+      if (comp) total += comp.price;
+    });
+    text += `\\nTotal estimado: ${money(total)}`;
+
+    sessionStorage.setItem('emca-armado', text);
+    window.location.href = 'index.html#contacto';
+  });
+
+  btnReset.addEventListener('click', () => {
+    Object.keys(build).forEach(k => build[k] = null);
+    showStorage2 = false;
+    renderAll();
+  });
+
+  renderAll();
 })();

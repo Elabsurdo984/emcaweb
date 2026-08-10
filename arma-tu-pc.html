@@ -152,23 +152,29 @@
           </div>
 
           <!-- MODO 2: selección manual -->
-          <div
-            class="tabpanel"
-            id="panel-manual"
-            role="tabpanel"
-            aria-labelledby="tab-manual"
-            tabindex="0"
-            hidden
-          >
-            <div class="builder-grid">
-              <form class="panel" id="manual-form">
-                <h2>Elegí cada componente</h2>
-                <div class="selects" id="manual-selects"></div>
-              </form>
-
-              <div class="panel" id="manual-result" aria-live="polite">
-                <h2>Tu armado</h2>
+          <div class="tabpanel" id="panel-manual" role="tabpanel" aria-labelledby="tab-manual" tabindex="0" hidden>
+            <div class="configurator">
+              <div class="configurator__main" id="cfg-selectors">
+                <!-- JS will populate this -->
               </div>
+              <aside class="configurator__sidebar" id="cfg-sidebar">
+                <div class="sidebar-sticky">
+                  <div class="sidebar__summary" id="cfg-summary">
+                    <h2>Tu configuración</h2>
+                    <p class="sidebar__empty">Empezá eligiendo un procesador.</p>
+                  </div>
+                  <div class="sidebar__compat" id="cfg-compat"></div>
+                  <div class="sidebar__total" id="cfg-total">
+                    <span>Total estimado</span>
+                    <span class="sidebar__price">$0</span>
+                  </div>
+                  <div class="sidebar__actions">
+                    <button class="btn btn--primary" type="button" id="cfg-consultar" disabled>Consultar este armado</button>
+                    <button class="btn btn--outline" type="button" id="cfg-reset">Reiniciar</button>
+                  </div>
+                  <p class="sidebar__disclaimer">Precios orientativos de ejemplo. Se confirman en el diagnóstico.</p>
+                </div>
+              </aside>
             </div>
           </div>
         </div>
@@ -230,6 +236,8 @@
     </a>
 
     <script src="public/js/main.js" defer></script>
+    <script src="public/js/pc-components-db.js" defer></script>
+    <script src="public/js/pc-compatibility.js" defer></script>
     <script src="public/js/arma-tu-pc.js" defer></script>
   </body>
 </html>
