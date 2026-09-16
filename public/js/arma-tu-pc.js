@@ -12,57 +12,57 @@ const COMPONENTES = {
   cpu: {
     label: "Procesador (CPU)",
     niveles: [
-      { name: "AMD Ryzen 5 5500 (ejemplo)", price: 150000 },
-      { name: "AMD Ryzen 5 7600 (ejemplo)", price: 300000 },
-      { name: "AMD Ryzen 7 7800X3D (ejemplo)", price: 620000 },
+      { name: "AMD Ryzen 5 5500 (ejemplo)", price: 155000 },
+      { name: "AMD Ryzen 5 7600 (ejemplo)", price: 345000 },
+      { name: "AMD Ryzen 7 7800X3D (ejemplo)", price: 730000 },
     ],
   },
   gpu: {
     label: "Placa de video (GPU)",
     niveles: [
-      { name: "Gráficos integrados / GT 1030 (ejemplo)", price: 90000 },
-      { name: "NVIDIA RTX 4060 8GB (ejemplo)", price: 480000 },
-      { name: "NVIDIA RTX 4070 Super 12GB (ejemplo)", price: 950000 },
+      { name: "Gráficos integrados / Entrada básica (ejemplo)", price: 90000 },
+      { name: "NVIDIA RTX 4060 8GB (ejemplo)", price: 520000 },
+      { name: "NVIDIA RTX 5060 Ti 16GB (ejemplo)", price: 750000 },
     ],
   },
   ram: {
     label: "Memoria RAM",
     niveles: [
-      { name: "8 GB DDR4 3200 MHz (ejemplo)", price: 45000 },
-      { name: "16 GB DDR5 5600 MHz (ejemplo)", price: 110000 },
-      { name: "32 GB DDR5 6000 MHz (ejemplo)", price: 230000 },
+      { name: "8 GB DDR4 3200 MHz (ejemplo)", price: 48000 },
+      { name: "16 GB DDR5 6000 MHz (ejemplo)", price: 135000 },
+      { name: "32 GB DDR5 6000 MHz (ejemplo)", price: 225000 },
     ],
   },
   almacenamiento: {
     label: "Almacenamiento",
     niveles: [
-      { name: "SSD 480 GB SATA (ejemplo)", price: 45000 },
-      { name: "SSD NVMe 1 TB (ejemplo)", price: 110000 },
-      { name: "SSD NVMe 2 TB + HDD 2 TB (ejemplo)", price: 290000 },
+      { name: "SSD 480 GB SATA (ejemplo)", price: 65000 },
+      { name: "SSD NVMe 1 TB (ejemplo)", price: 125000 },
+      { name: "SSD NVMe 2 TB (ejemplo)", price: 255000 },
     ],
   },
   motherboard: {
     label: "Motherboard",
     niveles: [
-      { name: "A520M básica (ejemplo)", price: 90000 },
-      { name: "B650M DDR5 (ejemplo)", price: 190000 },
-      { name: "X670 gama alta (ejemplo)", price: 400000 },
+      { name: "A520M / H610M básica (ejemplo)", price: 105000 },
+      { name: "B650M / B760M (ejemplo)", price: 195000 },
+      { name: "B650M WiFi gama media-alta (ejemplo)", price: 255000 },
     ],
   },
   fuente: {
     label: "Fuente de alimentación",
     niveles: [
-      { name: "500W genérica certificada (ejemplo)", price: 55000 },
-      { name: "650W 80 Plus Bronze (ejemplo)", price: 110000 },
-      { name: "850W 80 Plus Gold (ejemplo)", price: 220000 },
+      { name: "550W 80 Plus Bronze (ejemplo)", price: 78000 },
+      { name: "650W 80 Plus Bronze (ejemplo)", price: 95000 },
+      { name: "850W 80 Plus Gold (ejemplo)", price: 195000 },
     ],
   },
   gabinete: {
     label: "Gabinete",
     niveles: [
-      { name: "Gabinete ATX básico (ejemplo)", price: 45000 },
-      { name: "Gabinete ATX con 3 fans (ejemplo)", price: 90000 },
-      { name: "Gabinete premium con airflow (ejemplo)", price: 180000 },
+      { name: "Gabinete Micro-ATX básico (ejemplo)", price: 115000 },
+      { name: "Gabinete con mesh y coolers (ejemplo)", price: 148000 },
+      { name: "Gabinete premium airflow (ejemplo)", price: 225000 },
     ],
   },
 };

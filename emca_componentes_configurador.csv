@@ -1,106 +1,109 @@
-﻿categoria,nombre,marca,socket,tipo_ram,capacidad_gb,velocidad_ram_mhz,modulos,chipset,form_factor,m2_slots,wifi,bluetooth,interfaz,vram_gb,potencia_w,certificacion,compatibilidad,tamaño_mm,cantidad,precio_estimado_ars
-CPU,AMD Ryzen 5 5500,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,175000
-CPU,AMD Ryzen 5 5600,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,235000
-CPU,AMD Ryzen 5 5600G,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Radeon Graphics,,,230000
-CPU,AMD Ryzen 5 5600GT,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Radeon Graphics,,,285000
-CPU,AMD Ryzen 7 5700G,AMD,AM4,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: Radeon Graphics,,,350000
-CPU,AMD Ryzen 7 5700X,AMD,AM4,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,350000
-CPU,AMD Ryzen 7 5700X3D,AMD,AM4,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,500000
-CPU,AMD Ryzen 5 7500F,AMD,AM5,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,400000
-CPU,AMD Ryzen 5 7600,AMD,AM5,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Radeon Graphics,,,345000
+categoria,nombre,marca,socket,tipo_ram,capacidad_gb,velocidad_ram_mhz,modulos,chipset,form_factor,m2_slots,wifi,bluetooth,interfaz,vram_gb,potencia_w,certificacion,compatibilidad,tamaño_mm,cantidad,precio_estimado_ars
+CPU,AMD Ryzen 5 5500,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,155000
+CPU,Intel Core i3-12100F,Intel,LGA1700,,,,,,,,,,,,,,4 núcleos / 8 hilos; iGPU: No,,,175000
+CPU,Intel Core i3-12100,Intel,LGA1700,,,,,,,,,,,,,,4 núcleos / 8 hilos; iGPU: Intel UHD 730,,,195000
+CPU,AMD Ryzen 5 5600,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,210000
+CPU,AMD Ryzen 5 5600G,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Radeon Graphics,,,225000
+CPU,Intel Core i5-12400F,Intel,LGA1700,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,235000
+CPU,AMD Ryzen 5 5600GT,AMD,AM4,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Radeon Graphics,,,240000
+CPU,Intel Core i5-12400,Intel,LGA1700,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Intel UHD 730,,,275000
+CPU,Intel Core i5-13400F,Intel,LGA1700,,,,,,,,,,,,,,10 núcleos / 16 hilos; iGPU: No,,,295000
+CPU,AMD Ryzen 7 5700X,AMD,AM4,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,310000
+CPU,AMD Ryzen 5 7500F,AMD,AM5,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,310000
 CPU,AMD Ryzen 5 8600G,AMD,AM5,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Radeon 760M,,,325000
+CPU,AMD Ryzen 7 5700G,AMD,AM4,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: Radeon Graphics,,,330000
+CPU,Intel Core i5-14400F,Intel,LGA1700,,,,,,,,,,,,,,10 núcleos / 16 hilos; iGPU: No,,,335000
+CPU,AMD Ryzen 5 7600,AMD,AM5,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: Radeon Graphics,,,345000
 CPU,AMD Ryzen 5 9600,AMD,AM5,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,410000
-CPU,AMD Ryzen 7 7700,AMD,AM5,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: Radeon Graphics,,,500000
-CPU,AMD Ryzen 7 7800X3D,AMD,AM5,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,650000
-CPU,AMD Ryzen 7 9800X3D,AMD,AM5,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,750000
-CPU,Intel Core i3-12100F,Intel,LGA1700,,,,,,,,,,,,,,4 núcleos / 8 hilos; iGPU: No,,,165000
-CPU,Intel Core i5-12400F,Intel,LGA1700,,,,,,,,,,,,,,6 núcleos / 12 hilos; iGPU: No,,,275000
-CPU,Intel Core i5-13400F,Intel,LGA1700,,,,,,,,,,,,,,10 núcleos / 16 hilos; iGPU: No,,,320000
-CPU,Intel Core i5-14400F,Intel,LGA1700,,,,,,,,,,,,,,10 núcleos / 16 hilos; iGPU: No,,,300000
-CPU,Intel Core i5-14600K,Intel,LGA1700,,,,,,,,,,,,,,14 núcleos / 20 hilos; iGPU: Intel UHD 770,,,450000
-CPU,Intel Core i7-12700,Intel,LGA1700,,,,,,,,,,,,,,12 núcleos / 20 hilos; iGPU: Intel UHD 770,,,700000
-CPU,Intel Core i7-14700K,Intel,LGA1700,,,,,,,,,,,,,,20 núcleos / 28 hilos; iGPU: Intel UHD 770,,,810000
-Motherboard,Gigabyte A520M K V2,Gigabyte,AM4,DDR4,,,,A520,Micro-ATX,1,No,No,,,,,,,,110000
+CPU,AMD Ryzen 7 5700X3D,AMD,AM4,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,460000
+CPU,Intel Core i5-14600K,Intel,LGA1700,,,,,,,,,,,,,,14 núcleos / 20 hilos; iGPU: Intel UHD 770,,,475000
+CPU,Intel Core i7-12700,Intel,LGA1700,,,,,,,,,,,,,,12 núcleos / 20 hilos; iGPU: Intel UHD 770,,,490000
+CPU,AMD Ryzen 7 7700,AMD,AM5,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: Radeon Graphics,,,510000
+CPU,Intel Core i7-14700K,Intel,LGA1700,,,,,,,,,,,,,,20 núcleos / 28 hilos; iGPU: Intel UHD 770,,,620000
+CPU,AMD Ryzen 7 7800X3D,AMD,AM5,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,730000
+CPU,AMD Ryzen 7 9800X3D,AMD,AM5,,,,,,,,,,,,,,8 núcleos / 16 hilos; iGPU: No,,,820000
+Motherboard,Gigabyte A520M K V2,Gigabyte,AM4,DDR4,,,,A520,Micro-ATX,1,No,No,,,,,,,,105000
 Motherboard,ASUS Prime A520M-K,ASUS,AM4,DDR4,,,,A520,Micro-ATX,1,No,No,,,,,,,,110000
 Motherboard,MSI A520M-A PRO,MSI,AM4,DDR4,,,,A520,Micro-ATX,1,No,No,,,,,,,,110000
+Motherboard,MSI PRO H610M-S DDR4,MSI,LGA1700,DDR4,,,,H610,Micro-ATX,1,No,No,,,,,,,,125000
+Motherboard,Gigabyte H610M H DDR4,Gigabyte,LGA1700,DDR4,,,,H610,Micro-ATX,1,No,No,,,,,,,,130000
 Motherboard,Gigabyte B550M K,Gigabyte,AM4,DDR4,,,,B550,Micro-ATX,1,No,No,,,,,,,,145000
-Motherboard,Gigabyte B550M DS3H,Gigabyte,AM4,DDR4,,,,B550,Micro-ATX,2,No,No,,,,,,,,180000
-Motherboard,MSI B550M PRO-VDH,MSI,AM4,DDR4,,,,B550,Micro-ATX,2,No,No,,,,,,,,195000
-Motherboard,MSI B550M PRO-VDH WiFi,MSI,AM4,DDR4,,,,B550,Micro-ATX,2,Sí,Sí,,,,,,,,250000
-Motherboard,Gigabyte A620M K,Gigabyte,AM5,DDR5,,,,A620,Micro-ATX,1,No,No,,,,,,,,160000
-Motherboard,ASUS Prime A620M-K,ASUS,AM5,DDR5,,,,A620,Micro-ATX,1,No,No,,,,,,,,175000
-Motherboard,Gigabyte B650M DS3H,Gigabyte,AM5,DDR5,,,,B650,Micro-ATX,2,No,No,,,,,,,,220000
-Motherboard,MSI PRO B650M-B,MSI,AM5,DDR5,,,,B650,Micro-ATX,2,No,No,,,,,,,,210000
-Motherboard,MSI PRO B650M-A WiFi,MSI,AM5,DDR5,,,,B650,Micro-ATX,2,Sí,Sí,,,,,,,,260000
-Motherboard,MSI PRO H610M-S DDR4,MSI,LGA1700,DDR4,,,,H610,Micro-ATX,1,No,No,,,,,,,,140000
-Motherboard,Gigabyte H610M H DDR4,Gigabyte,LGA1700,DDR4,,,,H610,Micro-ATX,1,No,No,,,,,,,,145000
-Motherboard,ASUS PRIME B660M-A D4,ASUS,LGA1700,DDR4,,,,B660,Micro-ATX,2,No,No,,,,,,,,190000
-Motherboard,Gigabyte B760M DS3H DDR4,Gigabyte,LGA1700,DDR4,,,,B760,Micro-ATX,2,No,No,,,,,,,,200000
-Motherboard,MSI PRO B760M-A WiFi DDR4,MSI,LGA1700,DDR4,,,,B760,Micro-ATX,2,Sí,Sí,,,,,,,,240000
-RAM,Kingston Fury Beast 8GB DDR4 3200,Kingston,,DDR4,8,3200,1,,,,,,,,,,,,,50000
-RAM,Kingston Fury Beast 16GB (2x8) DDR4 3200,Kingston,,DDR4,16,3200,2,,,,,,,,,,,,,90000
+Motherboard,Gigabyte B550M DS3H,Gigabyte,AM4,DDR4,,,,B550,Micro-ATX,2,No,No,,,,,,,,165000
+Motherboard,ASUS Prime A620M-K,ASUS,AM5,DDR5,,,,A620,Micro-ATX,1,No,No,,,,,,,,165000
+Motherboard,ASUS PRIME B660M-A D4,ASUS,LGA1700,DDR4,,,,B660,Micro-ATX,2,No,No,,,,,,,,175000
+Motherboard,MSI B550M PRO-VDH,MSI,AM4,DDR4,,,,B550,Micro-ATX,2,No,No,,,,,,,,180000
+Motherboard,Gigabyte B760M DS3H DDR4,Gigabyte,LGA1700,DDR4,,,,B760,Micro-ATX,2,No,No,,,,,,,,190000
+Motherboard,MSI PRO B650M-B,MSI,AM5,DDR5,,,,B650,Micro-ATX,2,No,No,,,,,,,,195000
+Motherboard,Gigabyte B650M DS3H,Gigabyte,AM5,DDR5,,,,B650,Micro-ATX,2,No,No,,,,,,,,215000
+Motherboard,MSI B550M PRO-VDH WiFi,MSI,AM4,DDR4,,,,B550,Micro-ATX,2,Sí,Sí,,,,,,,,230000
+Motherboard,MSI PRO B760M-A WiFi DDR4,MSI,LGA1700,DDR4,,,,B760,Micro-ATX,2,Sí,Sí,,,,,,,,235000
+Motherboard,MSI PRO B650M-A WiFi,MSI,AM5,DDR5,,,,B650,Micro-ATX,2,Sí,Sí,,,,,,,,255000
+RAM,Kingston Fury Beast 8GB DDR4 3200,Kingston,,DDR4,8,3200,1,,,,,,,,,,,,,48000
+RAM,Kingston Fury Beast 16GB (2x8) DDR4 3200,Kingston,,DDR4,16,3200,2,,,,,,,,,,,,,88000
+RAM,Kingston Fury Beast 16GB (2x8) DDR5 6000,Kingston,,DDR5,16,6000,2,,,,,,,,,,,,,135000
 RAM,Kingston Fury Beast 32GB (2x16) DDR4 3200,Kingston,,DDR4,32,3200,2,,,,,,,,,,,,,160000
-RAM,Kingston Fury Beast 64GB (2x32) DDR4 3200,Kingston,,DDR4,64,3200,2,,,,,,,,,,,,,300000
-RAM,Kingston Fury Beast 16GB (2x8) DDR5 6000,Kingston,,DDR5,16,6000,2,,,,,,,,,,,,,130000
-RAM,Kingston Fury Beast 32GB (2x16) DDR5 6000,Kingston,,DDR5,32,6000,2,,,,,,,,,,,,,220000
+RAM,Kingston Fury Beast 32GB (2x16) DDR5 6000,Kingston,,DDR5,32,6000,2,,,,,,,,,,,,,225000
+RAM,Kingston Fury Beast 64GB (2x32) DDR4 3200,Kingston,,DDR4,64,3200,2,,,,,,,,,,,,,310000
 RAM,Kingston Fury Beast 64GB (2x32) DDR5 6000,Kingston,,DDR5,64,6000,2,,,,,,,,,,,,,420000
-GPU,Radeon RX 6600 8GB,AMD,,,,,,,,,,,PCIe 4.0 x8,8,,,,,,300000
-GPU,Intel Arc B570 10GB,Intel,,,,,,,,,,,PCIe 4.0 x8,10,,,,,,360000
+GPU,Sin GPU dedicada (usar gráficos integrados),Integrada,,,,,,,,,,,Integrada,0,,,,,,0
+GPU,Radeon RX 6600 8GB,AMD,,,,,,,,,,,PCIe 4.0 x8,8,,,,,,350000
+GPU,Intel Arc B570 10GB,Intel,,,,,,,,,,,PCIe 4.0 x8,10,,,,,,380000
 GPU,GeForce RTX 5050 8GB,NVIDIA,,,,,,,,,,,PCIe 4.0 x8,8,,,,,,420000
 GPU,Radeon RX 7600 8GB,AMD,,,,,,,,,,,PCIe 4.0 x8,8,,,,,,450000
-GPU,GeForce RTX 4060 8GB,NVIDIA,,,,,,,,,,,PCIe 4.0 x8,8,,,,,,500000
-GPU,GeForce RTX 5060 8GB,NVIDIA,,,,,,,,,,,PCIe 5.0 x8,8,,,,,,550000
-GPU,Radeon RX 9060 XT 16GB,AMD,,,,,,,,,,,PCIe 5.0 x16,16,,,,,,650000
-GPU,GeForce RTX 5060 Ti 16GB,NVIDIA,,,,,,,,,,,PCIe 5.0 x8,16,,,,,,700000
-Almacenamiento,Kingston NV2 500GB,Kingston,,,500,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,80000
-Almacenamiento,WD Blue SN580 500GB,WD,,,500,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,90000
-Almacenamiento,Kingston NV2 1TB,Kingston,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,120000
-Almacenamiento,WD Blue SN580 1TB,WD,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,140000
-Almacenamiento,Crucial P3 Plus 1TB,Crucial,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,125000
-Almacenamiento,Lexar NM790 1TB,Lexar,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,155000
-Almacenamiento,WD Blue SN580 2TB,WD,,,2000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,250000
-Almacenamiento,Lexar NM790 2TB,Lexar,,,2000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,270000
-Almacenamiento,Kingston A400 480GB,Kingston,,,480,,,,,,,,SSD SATA / SATA III,,,,,,,70000
-Almacenamiento,Crucial BX500 480GB,Crucial,,,480,,,,,,,,SSD SATA / SATA III,,,,,,,75000
-Almacenamiento,Kingston A400 960GB,Kingston,,,960,,,,,,,,SSD SATA / SATA III,,,,,,,110000
+GPU,GeForce RTX 4060 8GB,NVIDIA,,,,,,,,,,,PCIe 4.0 x8,8,,,,,,520000
+GPU,GeForce RTX 5060 8GB,NVIDIA,,,,,,,,,,,PCIe 5.0 x8,8,,,,,,580000
+GPU,Radeon RX 9060 XT 16GB,AMD,,,,,,,,,,,PCIe 5.0 x16,16,,,,,,680000
+GPU,GeForce RTX 5060 Ti 16GB,NVIDIA,,,,,,,,,,,PCIe 5.0 x8,16,,,,,,750000
+Almacenamiento,Kingston A400 480GB,Kingston,,,480,,,,,,,,SSD SATA / SATA III,,,,,,,65000
+Almacenamiento,Crucial BX500 480GB,Crucial,,,480,,,,,,,,SSD SATA / SATA III,,,,,,,70000
+Almacenamiento,Seagate Barracuda 1TB,Seagate,,,1000,,,,,,,,HDD / SATA III,,,,,,,75000
+Almacenamiento,WD Blue 1TB,WD,,,1000,,,,,,,,HDD / SATA III,,,,,,,78000
+Almacenamiento,Kingston NV2 500GB,Kingston,,,500,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,82000
+Almacenamiento,WD Blue SN580 500GB,WD,,,500,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,92000
+Almacenamiento,Seagate Barracuda 2TB,Seagate,,,2000,,,,,,,,HDD / SATA III,,,,,,,105000
+Almacenamiento,Kingston A400 960GB,Kingston,,,960,,,,,,,,SSD SATA / SATA III,,,,,,,115000
+Almacenamiento,WD Blue 2TB,WD,,,2000,,,,,,,,HDD / SATA III,,,,,,,115000
+Almacenamiento,Kingston NV2 1TB,Kingston,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,125000
+Almacenamiento,Crucial P3 Plus 1TB,Crucial,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,135000
 Almacenamiento,Crucial MX500 1TB,Crucial,,,1000,,,,,,,,SSD SATA / SATA III,,,,,,,140000
-Almacenamiento,Seagate Barracuda 1TB,Seagate,,,1000,,,,,,,,HDD / SATA III,,,,,,,70000
-Almacenamiento,Seagate Barracuda 2TB,Seagate,,,2000,,,,,,,,HDD / SATA III,,,,,,,100000
-Almacenamiento,WD Blue 1TB,WD,,,1000,,,,,,,,HDD / SATA III,,,,,,,75000
-Almacenamiento,WD Blue 2TB,WD,,,2000,,,,,,,,HDD / SATA III,,,,,,,110000
-Fuente,MSI MAG A550BN 550W,MSI,,,,,,,,,,,,,550,80+ Bronze,,,,50000
-Fuente,Corsair CX550 550W,Corsair,,,,,,,,,,,,,550,80+ Bronze,,,,90000
-Fuente,MSI MAG A650BN 650W,MSI,,,,,,,,,,,,,650,80+ Bronze,,,,85000
-Fuente,Corsair CX650 650W,Corsair,,,,,,,,,,,,,650,80+ Bronze,,,,110000
-Fuente,XPG Pylon 650W,XPG,,,,,,,,,,,,,650,80+ Bronze,,,,100000
-Fuente,MSI MAG A750GL 750W,MSI,,,,,,,,,,,,,750,80+ Gold,,,,150000
-Fuente,Corsair RM750e 750W,Corsair,,,,,,,,,,,,,750,80+ Gold,,,,180000
+Almacenamiento,WD Blue SN580 1TB,WD,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,145000
+Almacenamiento,Lexar NM790 1TB,Lexar,,,1000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,160000
+Almacenamiento,WD Blue SN580 2TB,WD,,,2000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,255000
+Almacenamiento,Lexar NM790 2TB,Lexar,,,2000,,,,,,,,SSD NVMe / PCIe 4.0 x4,,,,,,,275000
+Fuente,MSI MAG A550BN 550W,MSI,,,,,,,,,,,,,550,80+ Bronze,,,,78000
+Fuente,Corsair CX550 550W,Corsair,,,,,,,,,,,,,550,80+ Bronze,,,,88000
+Fuente,MSI MAG A650BN 650W,MSI,,,,,,,,,,,,,650,80+ Bronze,,,,95000
+Fuente,XPG Pylon 650W,XPG,,,,,,,,,,,,,650,80+ Bronze,,,,105000
+Fuente,Corsair CX650 650W,Corsair,,,,,,,,,,,,,650,80+ Bronze,,,,112000
+Fuente,MSI MAG A750GL 750W,MSI,,,,,,,,,,,,,750,80+ Gold,,,,155000
 Fuente,XPG Core Reactor 750W,XPG,,,,,,,,,,,,,750,80+ Gold,,,,170000
-Fuente,Corsair RM850e 850W,Corsair,,,,,,,,,,,,,850,80+ Gold,,,,220000
-Fuente,MSI MAG A850GL 850W,MSI,,,,,,,,,,,,,850,80+ Gold,,,,190000
+Fuente,Corsair RM750e 750W,Corsair,,,,,,,,,,,,,750,80+ Gold,,,,185000
+Fuente,MSI MAG A850GL 850W,MSI,,,,,,,,,,,,,850,80+ Gold,,,,195000
+Fuente,Corsair RM850e 850W,Corsair,,,,,,,,,,,,,850,80+ Gold,,,,225000
+Gabinete,Cooler Master MasterBox Q300L,Cooler Master,,,,,,,Micro-ATX,,,,,,,,,,,115000
+Gabinete,Thermaltake Versa H18,Thermaltake,,,,,,,Micro-ATX,,,,,,,,,,,118000
 Gabinete,DeepCool Matrexx 40,DeepCool,,,,,,,Micro-ATX,,,,,,,,,,,120000
-Gabinete,Cooler Master MasterBox Q300L,Cooler Master,,,,,,,Micro-ATX,,,,,,,,,,,110000
-Gabinete,Thermaltake Versa H18,Thermaltake,,,,,,,Micro-ATX,,,,,,,,,,,115000
-Gabinete,DeepCool CC560,DeepCool,,,,,,,ATX,,,,,,,,,,,140000
-Gabinete,Montech Air 100,Montech,,,,,,,Micro-ATX,,,,,,,,,,,150000
+Gabinete,DeepCool CC560,DeepCool,,,,,,,ATX,,,,,,,,,,,142000
+Gabinete,Montech Air 100,Montech,,,,,,,Micro-ATX,,,,,,,,,,,148000
 Gabinete,Montech Air 903,Montech,,,,,,,ATX,,,,,,,,,,,180000
-Gabinete,Corsair 3000D Airflow,Corsair,,,,,,,ATX,,,,,,,,,,,200000
-Gabinete,Corsair 4000D Airflow,Corsair,,,,,,,ATX,,,,,,,,,,,220000
+Gabinete,Corsair 3000D Airflow,Corsair,,,,,,,ATX,,,,,,,,,,,195000
+Gabinete,Corsair 4000D Airflow,Corsair,,,,,,,ATX,,,,,,,,,,,225000
+CPU Cooler,Cooler de stock (incluido con el CPU),Genérico,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,0
 CPU Cooler,Cooler stock AMD,AMD,,,,,,,,,,,,,,,AM4/AM5,,,25000
-CPU Cooler,DeepCool AG300,DeepCool,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,45000
-CPU Cooler,ID-Cooling SE-214-XT,ID-Cooling,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,50000
-CPU Cooler,DeepCool AG400,DeepCool,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,65000
-CPU Cooler,Thermalright Peerless Assassin 120,Thermalright,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,100000
-Ventilador extra,DeepCool FK120 120mm x1,DeepCool,,,,,,,,,,,,,,,,120,1,25000
-Ventilador extra,DeepCool FK120 120mm x3,DeepCool,,,,,,,,,,,,,,,,120,3,65000
-Ventilador extra,Arctic P12 120mm x1,Arctic,,,,,,,,,,,,,,,,120,1,30000
+CPU Cooler,DeepCool AG300,DeepCool,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,38000
+CPU Cooler,ID-Cooling SE-214-XT,ID-Cooling,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,44000
+CPU Cooler,DeepCool AG400,DeepCool,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,54000
+CPU Cooler,Thermalright Peerless Assassin 120,Thermalright,,,,,,,,,,,,,,,AM4/AM5/LGA1700,,,115000
+Ventilador extra,DeepCool FK120 120mm x1,DeepCool,,,,,,,,,,,,,,,,120,1,22000
+Ventilador extra,Arctic P12 120mm x1,Arctic,,,,,,,,,,,,,,,,120,1,28000
+Ventilador extra,DeepCool FK120 120mm x3,DeepCool,,,,,,,,,,,,,,,,120,3,60000
 Ventilador extra,Arctic P12 120mm x3,Arctic,,,,,,,,,,,,,,,,120,3,75000
-Wi-Fi/Bluetooth,TP-Link Archer T2U,TP-Link,,,,,,,,,Wi-Fi 5,No,USB 2.0/3.0,,,,,,,35000
-Wi-Fi/Bluetooth,TP-Link Archer T3U,TP-Link,,,,,,,,,Wi-Fi 5,No,USB 3.0,,,,,,,45000
-Wi-Fi/Bluetooth,TP-Link Archer TX20U Plus,TP-Link,,,,,,,,,Wi-Fi 6,No,USB 3.0,,,,,,,70000
-Wi-Fi/Bluetooth,Adaptador USB Bluetooth 5.3,Genérico,,,,,,,,,No,Sí,USB 2.0/3.0,,,,,,,20000
+Wi-Fi/Bluetooth,Adaptador USB Bluetooth 5.3,Genérico,,,,,,,,,No,Sí,USB 2.0/3.0,,,,,,,18000
+Wi-Fi/Bluetooth,TP-Link Archer T2U,TP-Link,,,,,,,,,Wi-Fi 5,No,USB 2.0/3.0,,,,,,,34000
+Wi-Fi/Bluetooth,TP-Link Archer T3U,TP-Link,,,,,,,,,Wi-Fi 5,No,USB 3.0,,,,,,,46000
+Wi-Fi/Bluetooth,TP-Link Archer TX20U Plus,TP-Link,,,,,,,,,Wi-Fi 6,No,USB 3.0,,,,,,,72000
+Sistema operativo,Ubuntu,Linux,,,,,,,,,,,,,,,,,,0
+Sistema operativo,Windows 10 Home,Microsoft,,,,,,,,,,,,,,,,,,150000
+Sistema operativo,Windows 10 Pro,Microsoft,,,,,,,,,,,,,,,,,,210000
 Sistema operativo,Windows 11 Home,Microsoft,,,,,,,,,,,,,,,64-bit / Licencia,,,180000
-Sistema operativo,Windows 11 Pro,Microsoft,,,,,,,,,,,,,,,64-bit / Licencia,,,250000
-Sistema operativo,Ubuntu,Linux,,,,,,,,,,,,,,,,,,
-Sistema operativo,Windows 10 Home,Microsoft,,,,,,,,,,,,,,,,,,
-Sistema operativo,Windows 10 Pro,Microsoft,,,,,,,,,,,,,,,,,,
+Sistema operativo,Windows 11 Pro,Microsoft,,,,,,,,,,,,,,,64-bit / Licencia,,,260000
