@@ -304,6 +304,12 @@
   height: 100%;
   object-fit: contain;
 }
+.product-card__placeholder {
+  font-size: 2.6rem;
+  line-height: 1;
+  user-select: none;
+  opacity: 0.6;
+}
 
 .product-card__info {
   display: flex;

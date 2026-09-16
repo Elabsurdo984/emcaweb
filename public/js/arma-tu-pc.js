@@ -398,10 +398,16 @@ function irAContacto(seleccion, titulo) {
         ? '<span class="product-card__badge product-card__badge--ok">✔ Compatible</span>'
         : '<span class="product-card__badge product-card__badge--error">✖ No compatible</span>';
       
+      const catIcon = (typeof CATEGORY_INFO !== 'undefined' && CATEGORY_INFO[currentCategory] && CATEGORY_INFO[currentCategory].icon) || '📦';
+      const hasImage = Boolean(opt.img && opt.img !== 'public/img/placeholder.jpg');
+      const imgHtml = hasImage
+        ? `<img src="${opt.img}" alt="${opt.name}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'product-card__placeholder\\'>${catIcon}</span>';" />`
+        : `<span class="product-card__placeholder">${catIcon}</span>`;
+
       html += `
         <div class="product-card product-card--${compatible ? 'ok' : 'error'}">
           <div class="product-card__img">
-            <img src="${opt.img || ''}" alt="${opt.name}" onerror="this.style.display='none'" />
+            ${imgHtml}
           </div>
           <div class="product-card__info">
             <div class="product-card__name">${opt.name}</div>
@@ -419,6 +425,7 @@ function irAContacto(seleccion, titulo) {
        html += `
         <div class="product-card">
           <div class="product-card__img">
+            <span class="product-card__placeholder">🚫</span>
           </div>
           <div class="product-card__info">
             <div class="product-card__name">Ninguno / Saltar</div>
