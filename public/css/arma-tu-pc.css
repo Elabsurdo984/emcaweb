@@ -228,6 +228,165 @@
   gap: var(--space-4);
 }
 
+/* Buscador global y filtros de componentes ------------------------------ */
+.cfg-search-container {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.cfg-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.cfg-search-icon {
+  position: absolute;
+  left: 0.9rem;
+  font-size: 1.05rem;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.cfg-search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 2.6rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--navy-900);
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.cfg-search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.15);
+}
+
+.cfg-search-clear {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  transition: background var(--transition), color var(--transition);
+}
+.cfg-search-clear:hover {
+  background: var(--gray-200);
+  color: var(--navy-900);
+}
+
+.cfg-category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.cfg-filter-btn {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--gray-50);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all var(--transition);
+}
+.cfg-filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--navy-900);
+}
+.cfg-filter-btn.is-active {
+  background: var(--navy-900);
+  color: var(--white);
+  border-color: var(--navy-900);
+}
+
+/* Resultados de búsqueda */
+.search-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+.search-results-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--navy-900);
+}
+.search-results-count {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+.search-empty {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  color: var(--text-muted);
+  background: var(--white);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+.search-empty h4 {
+  font-size: 1.1rem;
+  color: var(--navy-900);
+  margin-bottom: var(--space-2);
+}
+
+.product-card__cat-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.product-card--selected {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.35) !important;
+  background: #f0f9ff;
+}
+
+.btn--selected {
+  background: #059669 !important;
+  color: var(--white) !important;
+  border-color: #059669 !important;
+  cursor: default;
+}
+
 .wizard-steps {
   display: flex;
   flex-wrap: wrap;
@@ -247,13 +406,26 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition);
+}
+.wizard-step:hover:not(.wizard-step--active) {
+  background: var(--gray-200);
+  color: var(--navy-900);
 }
 .wizard-step--active {
   background: var(--navy-900);
   color: var(--white);
+  cursor: default;
 }
 .wizard-step--completed {
   background: rgba(22, 163, 74, 0.15);
+  color: var(--success);
+}
+.wizard-step--completed:hover:not(.wizard-step--active) {
+  background: rgba(22, 163, 74, 0.25);
   color: var(--success);
 }
 

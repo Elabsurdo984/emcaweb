@@ -154,8 +154,45 @@
           <!-- MODO 2: selección manual -->
           <div class="tabpanel" id="panel-manual" role="tabpanel" aria-labelledby="tab-manual" tabindex="0" hidden>
             <div class="configurator">
-              <div class="configurator__main" id="cfg-selectors">
-                <!-- JS will populate this -->
+              <div class="configurator__main">
+                <!-- Buscador global y filtros rápidos -->
+                <div class="cfg-search-container" id="cfg-search-container">
+                  <div class="cfg-search-box">
+                    <span class="cfg-search-icon" aria-hidden="true">🔍</span>
+                    <input
+                      type="search"
+                      id="cfg-search-input"
+                      class="cfg-search-input"
+                      placeholder="Buscar cualquier componente (ej: RTX 4060, Ryzen 5, B550, Kingston, 1TB...)"
+                      aria-label="Buscar componente en el configurador"
+                      autocomplete="off"
+                    />
+                    <button
+                      type="button"
+                      id="cfg-search-clear"
+                      class="cfg-search-clear"
+                      aria-label="Limpiar búsqueda"
+                      title="Limpiar búsqueda"
+                      hidden
+                    >✕</button>
+                  </div>
+                  <div class="cfg-category-filters" id="cfg-category-filters" role="group" aria-label="Filtrar componentes por categoría">
+                    <button type="button" class="cfg-filter-btn is-active" data-cat="all">Todos</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="cpu">Procesador</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="motherboard">Motherboard</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="ram">RAM</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="gpu">Placa de video</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="storage">Discos</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="psu">Fuente</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="pccase">Gabinete</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="cooler">Cooler</button>
+                    <button type="button" class="cfg-filter-btn" data-cat="extras">Extras</button>
+                  </div>
+                </div>
+
+                <div id="cfg-selectors">
+                  <!-- JS will populate this -->
+                </div>
               </div>
               <aside class="configurator__sidebar" id="cfg-sidebar">
                 <div class="sidebar-sticky">

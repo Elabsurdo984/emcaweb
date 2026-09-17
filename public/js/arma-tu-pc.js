@@ -308,7 +308,7 @@ function irAContacto(seleccion, titulo) {
   });
 })();
 
-/* MODO 2: selección manual (Wizard) ---------------------------------------- */
+/* MODO 2: selección manual (Wizard + Buscador) ---------------------------- */
 (function initManual() {
   const selectorsWrap = document.getElementById("cfg-selectors");
   const summaryWrap = document.getElementById("cfg-summary");
@@ -316,6 +316,10 @@ function irAContacto(seleccion, titulo) {
   const totalWrap = document.querySelector("#cfg-total .sidebar__price");
   const btnConsultar = document.getElementById("cfg-consultar");
   const btnReset = document.getElementById("cfg-reset");
+
+  const searchInput = document.getElementById("cfg-search-input");
+  const searchClearBtn = document.getElementById("cfg-search-clear");
+  const filterBtns = document.querySelectorAll(".cfg-filter-btn");
 
   if (!selectorsWrap) return;
 
@@ -331,6 +335,21 @@ function irAContacto(seleccion, titulo) {
     steps.splice(storageIdx + 1, 0, 'storage2');
   }
   let currentStepIndex = 0;
+  let searchQuery = "";
+  let selectedFilterCat = "all";
+
+  function isSearchActive() {
+    return searchQuery.trim().length > 0 || (selectedFilterCat !== "all" && searchQuery.trim().length > 0);
+  }
+
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
   function isComponentCompatible(cat, comp) {
     if (!comp) return true;
@@ -340,21 +359,182 @@ function irAContacto(seleccion, titulo) {
     return !errors.some(err => (err.cats || []).includes(cat));
   }
 
+  function getComponentSpecs(cat, opt) {
+    const dbCat = cat === 'storage2' ? 'storage' : cat;
+    if (dbCat === 'cpu') return `${opt.socket} | ${opt.tdp}W | ${opt.hasIgpu ? 'Gráficos iGPU' : 'Sin iGPU'}`;
+    if (dbCat === 'motherboard') return `${opt.socket} | ${opt.chipset} | ${opt.ramType} | ${opt.formFactor}`;
+    if (dbCat === 'ram') return `${opt.type} ${opt.speed}MHz | ${opt.capacity}`;
+    if (dbCat === 'gpu') return opt.id === 'gpu-none' ? 'Sin gráfica dedicada' : `${opt.tdp}W | ${opt.length}mm`;
+    if (dbCat === 'storage') return `${opt.storageType} | ${opt.capacity} | ${opt.interface}`;
+    if (dbCat === 'psu') return `${opt.wattage}W | ${opt.certification} | ${opt.modular}`;
+    if (dbCat === 'pccase') return `${opt.formFactors ? opt.formFactors.join(', ') : ''} | Max GPU: ${opt.maxGpuLength}mm`;
+    if (dbCat === 'cooler') return opt.id === 'cooler-stock' ? 'Cooler de fábrica' : `${opt.type} | TDP máx: ${opt.maxTdp}W`;
+    if (dbCat === 'fans') return `${opt.size}mm | x${opt.quantity}`;
+    if (dbCat === 'wifi') return `${opt.interface} | ${opt.features}`;
+    if (dbCat === 'os') return `${opt.type}`;
+    return '';
+  }
+
+  function renderComponentImage(opt, cat) {
+    const dbCat = cat === 'storage2' ? 'storage' : cat;
+    const catIcon = (typeof CATEGORY_INFO !== 'undefined' && CATEGORY_INFO[dbCat] && CATEGORY_INFO[dbCat].icon) || '📦';
+    const hasImage = Boolean(opt.img && opt.img !== 'public/img/placeholder.jpg');
+    if (hasImage) {
+      return `<img src="${opt.img}" alt="${escapeHtml(opt.name)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'product-card__placeholder\\'>${catIcon}</span>';" />`;
+    }
+    return `<span class="product-card__placeholder">${catIcon}</span>`;
+  }
+
+  function getTargetCategories(filter) {
+    if (filter === "all") return CATEGORY_ORDER;
+    if (filter === "extras") return ["fans", "wifi", "os"];
+    return [filter];
+  }
+
+  function searchComponents() {
+    const q = searchQuery.trim().toLowerCase();
+    const normalizedQuery = q.replace(/(\d+)\s+(tb|gb|mhz|w)\b/gi, '$1$2');
+    const tokens = normalizedQuery.length > 0 ? normalizedQuery.split(/\s+/).filter(Boolean) : [];
+    const targetCats = getTargetCategories(selectedFilterCat);
+    const results = [];
+
+    targetCats.forEach(cat => {
+      const list = PC_DB[cat] || [];
+      list.forEach(item => {
+        const info = CATEGORY_INFO[cat] || {};
+        const name = item.name.toLowerCase();
+        const searchableText = [
+          item.name,
+          item.id,
+          info.label || '',
+          item.socket || '',
+          item.chipset || '',
+          item.ramType || '',
+          item.storageType || '',
+          item.capacity || '',
+          item.certification || '',
+          item.type || '',
+          item.interface || '',
+          item.features || ''
+        ].join(' ').toLowerCase();
+
+        const matchesAll = tokens.length > 0 && tokens.every(tok => {
+          if (/^\d$/.test(tok)) {
+            return new RegExp('\\b' + tok + '\\b', 'i').test(name);
+          }
+          return searchableText.includes(tok);
+        });
+
+        if (matchesAll) {
+          results.push({ cat, comp: item });
+        }
+      });
+    });
+
+    return results;
+  }
+
+  function renderSearchResults() {
+    const results = searchComponents();
+    let html = '';
+
+    html += `
+      <div class="search-results-header">
+        <div>
+          <span class="search-results-title">Resultados de búsqueda</span>
+          <span class="search-results-count">${results.length} componente${results.length === 1 ? '' : 's'} encontrado${results.length === 1 ? '' : 's'} ${searchQuery.trim() ? `para "<strong>${escapeHtml(searchQuery.trim())}</strong>"` : ''}</span>
+        </div>
+        <button type="button" class="btn btn--outline" id="btn-exit-search">Volver al paso a paso</button>
+      </div>
+    `;
+
+    if (results.length === 0) {
+      html += `
+        <div class="search-empty">
+          <h4>No se encontraron componentes</h4>
+          <p>No encontramos resultados con los criterios ingresados.</p>
+          <p style="margin-top: 0.5rem; font-size: 0.85rem;">Probá buscando por marca (AMD, Intel, Kingston, Corsair), modelo (RTX, Ryzen, B550) o capacidad (1TB, 16GB).</p>
+          <button type="button" class="btn btn--outline" id="btn-clear-search-empty" style="margin-top: 1rem;">Limpiar búsqueda</button>
+        </div>
+      `;
+      selectorsWrap.innerHTML = html;
+
+      document.getElementById("btn-exit-search")?.addEventListener("click", exitSearch);
+      document.getElementById("btn-clear-search-empty")?.addEventListener("click", exitSearch);
+      return;
+    }
+
+    html += '<div class="product-grid">';
+    results.forEach(({ cat, comp }) => {
+      const isSelected = (build[cat] && build[cat].id === comp.id) ||
+                         (cat === 'storage' && build.storage2 && build.storage2.id === comp.id);
+      const compatible = isComponentCompatible(cat, comp);
+      const specsHtml = getComponentSpecs(cat, comp);
+      const catInfo = CATEGORY_INFO[cat] || { label: cat, icon: '📦' };
+
+      const compatBadge = compatible
+        ? '<span class="product-card__badge product-card__badge--ok">✔ Compatible</span>'
+        : '<span class="product-card__badge product-card__badge--error">✖ No compatible</span>';
+
+      const btnHtml = isSelected
+        ? `<button type="button" class="btn btn--primary btn--selected" data-action="toggle" data-cat="${cat}" data-id="${comp.id}">Seleccionado ✓</button>`
+        : `<button type="button" class="btn btn--primary btn--select-search" data-action="select" data-cat="${cat}" data-id="${comp.id}">Seleccionar</button>`;
+
+      html += `
+        <div class="product-card product-card--${compatible ? 'ok' : 'error'} ${isSelected ? 'product-card--selected' : ''}">
+          <div class="product-card__img">
+            ${renderComponentImage(comp, cat)}
+          </div>
+          <div class="product-card__info">
+            <span class="product-card__cat-tag">${catInfo.icon} ${catInfo.label}</span>
+            <div class="product-card__name">${escapeHtml(comp.name)}</div>
+            <div class="product-card__specs">${specsHtml}</div>
+            ${compatBadge}
+            <div class="product-card__price">${money(comp.price)}</div>
+          </div>
+          ${btnHtml}
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    selectorsWrap.innerHTML = html;
+
+    document.getElementById("btn-exit-search")?.addEventListener("click", exitSearch);
+
+    const actionBtns = selectorsWrap.querySelectorAll('[data-action]');
+    actionBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        const cat = btn.dataset.cat;
+        const id = btn.dataset.id;
+        const comp = (PC_DB[cat] || []).find(c => c.id === id);
+
+        if (action === 'select' && comp) {
+          updateBuild(cat, comp);
+        } else if (action === 'toggle' && comp) {
+          updateBuild(cat, null);
+        }
+        renderAll();
+      });
+    });
+  }
+
   function renderWizard() {
     let html = '';
     
-    // Steps indicator
+    // Steps indicator (ahora clickeables para saltar directo a cualquier categoría)
     html += '<div class="wizard-steps">';
     steps.forEach((step, idx) => {
       let info = CATEGORY_INFO[step];
       if (step === 'storage2') info = { label: 'Almacenamiento 2' };
-      if (!info) return; // fail-safe
+      if (!info) return;
       
       let className = 'wizard-step';
       if (idx === currentStepIndex) className += ' wizard-step--active';
       else if (build[step]) className += ' wizard-step--completed';
       
-      html += `<div class="${className}">${info.label}</div>`;
+      html += `<button type="button" class="${className}" data-step-idx="${idx}" title="Ir a ${info.label}">${info.label}</button>`;
     });
     html += '</div>';
 
@@ -369,6 +549,7 @@ function irAContacto(seleccion, titulo) {
     html += `
       <div class="wizard-header">
         <h3>${info.label}</h3>
+        ${info.note ? `<span style="font-size: 0.85rem; color: var(--text-muted);">${info.note}</span>` : ''}
       </div>
     `;
 
@@ -380,49 +561,38 @@ function irAContacto(seleccion, titulo) {
     
     options.forEach(opt => {
       const idx = PC_DB[dbCat].indexOf(opt);
+      const isSelected = build[currentCategory] && build[currentCategory].id === opt.id;
       const compatible = isComponentCompatible(currentCategory, opt);
-      let specsHtml = '';
-      if (dbCat === 'cpu') specsHtml = `${opt.socket} | ${opt.tdp}W`;
-      else if (dbCat === 'motherboard') specsHtml = `${opt.socket} | ${opt.chipset}`;
-      else if (dbCat === 'ram') specsHtml = `${opt.type} ${opt.speed}MHz`;
-      else if (dbCat === 'gpu') specsHtml = opt.id === 'gpu-none' ? 'Sin gráfica dedicada' : `${opt.tdp}W`;
-      else if (dbCat === 'storage') specsHtml = `${opt.storageType} ${opt.capacity}`;
-      else if (dbCat === 'psu') specsHtml = `${opt.wattage}W ${opt.certification}`;
-      else if (dbCat === 'pccase') specsHtml = `${opt.formFactors ? opt.formFactors.join(', ') : ''}`;
-      else if (dbCat === 'cooler') specsHtml = opt.id === 'cooler-stock' ? 'Cooler de fábrica' : `${opt.type}`;
-      else if (dbCat === 'fans') specsHtml = `${opt.size}mm x${opt.quantity}`;
-      else if (dbCat === 'wifi') specsHtml = `${opt.interface}`;
-      else if (dbCat === 'os') specsHtml = `${opt.type}`;
+      const specsHtml = getComponentSpecs(currentCategory, opt);
 
       const compatBadge = compatible
         ? '<span class="product-card__badge product-card__badge--ok">✔ Compatible</span>'
         : '<span class="product-card__badge product-card__badge--error">✖ No compatible</span>';
-      
-      const catIcon = (typeof CATEGORY_INFO !== 'undefined' && CATEGORY_INFO[currentCategory] && CATEGORY_INFO[currentCategory].icon) || '📦';
-      const hasImage = Boolean(opt.img && opt.img !== 'public/img/placeholder.jpg');
-      const imgHtml = hasImage
-        ? `<img src="${opt.img}" alt="${opt.name}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'product-card__placeholder\\'>${catIcon}</span>';" />`
-        : `<span class="product-card__placeholder">${catIcon}</span>`;
+
+      const btnHtml = isSelected
+        ? `<button type="button" class="btn btn--primary btn--selected" data-cat="${currentCategory}" data-idx="${idx}">Seleccionado ✓</button>`
+        : `<button type="button" class="btn btn--primary btn--select" data-cat="${currentCategory}" data-idx="${idx}">Seleccionar</button>`;
 
       html += `
-        <div class="product-card product-card--${compatible ? 'ok' : 'error'}">
+        <div class="product-card product-card--${compatible ? 'ok' : 'error'} ${isSelected ? 'product-card--selected' : ''}">
           <div class="product-card__img">
-            ${imgHtml}
+            ${renderComponentImage(opt, currentCategory)}
           </div>
           <div class="product-card__info">
-            <div class="product-card__name">${opt.name}</div>
+            <div class="product-card__name">${escapeHtml(opt.name)}</div>
             <div class="product-card__specs">${specsHtml}</div>
             ${compatBadge}
             <div class="product-card__price">${money(opt.price)}</div>
           </div>
-          <button class="btn btn--primary btn--select" data-cat="${currentCategory}" data-idx="${idx}">Seleccionar</button>
+          ${btnHtml}
         </div>
       `;
     });
     
     // Add "Ninguno" option if optional
     if (!info.required) {
-       html += `
+      const isNone = build[currentCategory] === null;
+      html += `
         <div class="product-card">
           <div class="product-card__img">
             <span class="product-card__placeholder">🚫</span>
@@ -432,7 +602,7 @@ function irAContacto(seleccion, titulo) {
             <div class="product-card__specs">No agregar este componente</div>
             <div class="product-card__price">$0</div>
           </div>
-          <button class="btn btn--outline btn--select" data-cat="${currentCategory}" data-idx="-1">Saltar paso</button>
+          <button type="button" class="btn btn--outline btn--select" data-cat="${currentCategory}" data-idx="-1">${isNone ? 'Sin componente' : 'Quitar / Saltar'}</button>
         </div>
       `;
     }
@@ -442,13 +612,13 @@ function irAContacto(seleccion, titulo) {
     // Nav
     html += '<div class="wizard-nav">';
     if (currentStepIndex > 0) {
-      html += `<button class="btn btn--outline" id="btn-prev">Volver atrás</button>`;
+      html += `<button type="button" class="btn btn--outline" id="btn-prev">Volver atrás</button>`;
     } else {
       html += `<div></div>`;
     }
     
     if (!info.required) {
-      html += `<button class="btn btn--outline" id="btn-skip">Saltar paso</button>`;
+      html += `<button type="button" class="btn btn--outline" id="btn-skip">Saltar paso</button>`;
     } else {
       html += `<div></div>`;
     }
@@ -457,11 +627,21 @@ function irAContacto(seleccion, titulo) {
     selectorsWrap.innerHTML = html;
 
     // Events
+    selectorsWrap.querySelectorAll('.wizard-step').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetIdx = parseInt(btn.dataset.stepIdx, 10);
+        if (!isNaN(targetIdx) && targetIdx !== currentStepIndex) {
+          currentStepIndex = targetIdx;
+          renderAll();
+        }
+      });
+    });
+
     const selectBtns = selectorsWrap.querySelectorAll('.btn--select');
     selectBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const cat = e.target.dataset.cat;
-        const val = parseInt(e.target.dataset.idx);
+        const val = parseInt(e.target.dataset.idx, 10);
         
         const dbC = cat === 'storage2' ? 'storage' : cat;
         const selectedComponent = val >= 0 ? PC_DB[dbC][val] : null;
@@ -499,12 +679,20 @@ function irAContacto(seleccion, titulo) {
   function updateBuild(cat, component) {
     build[cat] = component;
 
-    if (cat === 'cpu') {
-      build.motherboard = null;
-      build.ram = null;
-      build.cooler = null;
-    } else if (cat === 'motherboard') {
-      build.ram = null;
+    if (cat === 'cpu' && component) {
+      if (build.motherboard && build.motherboard.socket !== component.socket) {
+        build.motherboard = null;
+      }
+      if (build.ram && build.motherboard && build.motherboard.ramType !== build.ram.type) {
+        build.ram = null;
+      }
+    } else if (cat === 'motherboard' && component) {
+      if (build.cpu && build.cpu.socket !== component.socket) {
+        build.cpu = null;
+      }
+      if (build.ram && build.ram.type !== component.ramType) {
+        build.ram = null;
+      }
     }
   }
 
@@ -516,7 +704,7 @@ function irAContacto(seleccion, titulo) {
     errors.forEach(err => (err.cats || []).forEach(c => badCats.add(c)));
 
     let hasAny = false;
-    steps.forEach(cat => {
+    steps.forEach((cat, idx) => {
       let info = CATEGORY_INFO[cat];
       if (cat === 'storage2') info = { label: 'Almacenamiento sec.' };
       if (!info) return;
@@ -529,10 +717,10 @@ function irAContacto(seleccion, titulo) {
           ? '<span class="sidebar__badge sidebar__badge--error" aria-label="No compatible">✖ No compatible</span>'
           : '<span class="sidebar__badge sidebar__badge--ok" aria-label="Compatible">✔ Compatible</span>';
         html += `
-          <div class="sidebar__item">
+          <div class="sidebar__item" style="cursor: pointer;" data-jump-step="${idx}" title="Hacer clic para editar ${info.label}">
             <div class="sidebar__item-info">
-              <span class="sidebar__item-cat">${info.label}</span>
-              <span class="sidebar__item-name">${comp.name}</span>
+              <span class="sidebar__item-cat">${info.label} ✎</span>
+              <span class="sidebar__item-name">${escapeHtml(comp.name)}</span>
               ${badge}
             </div>
             <span class="sidebar__item-price">${money(comp.price)}</span>
@@ -540,10 +728,10 @@ function irAContacto(seleccion, titulo) {
         `;
       } else if (info && info.required) {
         html += `
-          <div class="sidebar__item">
+          <div class="sidebar__item" style="cursor: pointer;" data-jump-step="${idx}" title="Hacer clic para elegir ${info.label}">
             <div class="sidebar__item-info">
               <span class="sidebar__item-cat">${info.label}</span>
-              <span class="sidebar__item-name" style="color: var(--text-muted)">—</span>
+              <span class="sidebar__item-name" style="color: var(--text-muted)">— Elegir —</span>
             </div>
             <span class="sidebar__item-price"></span>
           </div>
@@ -552,10 +740,21 @@ function irAContacto(seleccion, titulo) {
     });
 
     if (!hasAny) {
-      html += '<p class="sidebar__empty">Empezá eligiendo un procesador.</p>';
+      html += '<p class="sidebar__empty">Empezá eligiendo un procesador o buscando componentes.</p>';
     }
 
     summaryWrap.innerHTML = html;
+
+    summaryWrap.querySelectorAll('[data-jump-step]').forEach(item => {
+      item.addEventListener('click', () => {
+        const stepIdx = parseInt(item.dataset.jumpStep, 10);
+        if (!isNaN(stepIdx)) {
+          exitSearch();
+          currentStepIndex = stepIdx;
+          renderAll();
+        }
+      });
+    });
   }
 
   function renderCompat() {
@@ -571,7 +770,7 @@ function irAContacto(seleccion, titulo) {
     if (errors.length > 0) {
       html += `<div class="compat-status compat-status--error">❌ Incompatible</div>`;
       errors.forEach(err => {
-        html += `<div class="compat-item compat-item--error">✖ ${err.msg}</div>`;
+        html += `<div class="compat-item compat-item--error">✖ ${escapeHtml(err.msg)}</div>`;
       });
     }
 
@@ -580,7 +779,7 @@ function irAContacto(seleccion, titulo) {
         html += `<div class="compat-status compat-status--warning">⚠️ Atención</div>`;
       }
       warnings.forEach(warn => {
-        html += `<div class="compat-item compat-item--warning">⚠ ${warn.msg}</div>`;
+        html += `<div class="compat-item compat-item--warning">⚠ ${escapeHtml(warn.msg)}</div>`;
       });
     }
 
@@ -604,23 +803,95 @@ function irAContacto(seleccion, titulo) {
     });
     totalWrap.textContent = money(total);
 
-    const isComplete = checkCompatibility(build).isValid;
+    const isComplete = checkCompatibility(build).isValid && build.cpu;
     btnConsultar.disabled = !isComplete;
   }
 
+  function updateFilterButtonsUI() {
+    filterBtns.forEach(btn => {
+      btn.classList.toggle("is-active", btn.dataset.cat === selectedFilterCat);
+    });
+  }
+
+  function exitSearch() {
+    searchQuery = "";
+    if (searchInput) searchInput.value = "";
+    if (searchClearBtn) searchClearBtn.hidden = true;
+    selectedFilterCat = "all";
+    updateFilterButtonsUI();
+    renderAll();
+  }
+
+  function renderSelectors() {
+    if (isSearchActive()) {
+      renderSearchResults();
+    } else {
+      renderWizard();
+    }
+  }
+
   function renderAll() {
-    renderWizard();
+    renderSelectors();
     renderSummary();
     renderCompat();
     renderTotal();
   }
 
+  // Eventos del buscador y filtros
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      searchQuery = searchInput.value;
+      if (searchClearBtn) {
+        searchClearBtn.hidden = searchQuery.trim().length === 0;
+      }
+      renderSelectors();
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        exitSearch();
+      }
+    });
+  }
+
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener("click", () => {
+      exitSearch();
+      searchInput?.focus();
+    });
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cat = btn.dataset.cat;
+      selectedFilterCat = cat;
+      updateFilterButtonsUI();
+
+      if (searchQuery.trim().length === 0) {
+        if (cat === "all") {
+          renderAll();
+        } else if (cat === "extras") {
+          currentStepIndex = steps.indexOf("fans");
+          renderAll();
+        } else {
+          const stepIdx = steps.indexOf(cat);
+          if (stepIdx !== -1) {
+            currentStepIndex = stepIdx;
+          }
+          renderAll();
+        }
+      } else {
+        renderSelectors();
+      }
+    });
+  });
+
   btnConsultar.addEventListener('click', () => {
-    let text = 'Hola, quiero consultar este armado que configuré:\\n\\n';
+    let text = 'Hola, quiero consultar este armado que configuré:\n\n';
     steps.forEach(cat => {
       if (build[cat]) {
         let label = cat === 'storage2' ? 'Almacenamiento secundario' : CATEGORY_INFO[cat].label;
-        text += `- ${label}: ${build[cat].name}\\n`;
+        text += `- ${label}: ${build[cat].name}\n`;
       }
     });
     
@@ -628,7 +899,7 @@ function irAContacto(seleccion, titulo) {
     Object.values(build).forEach(comp => {
       if (comp) total += comp.price;
     });
-    text += `\\nTotal estimado: ${money(total)}`;
+    text += `\nTotal estimado: ${money(total)}`;
 
     sessionStorage.setItem('emca-armado', text);
     window.location.href = 'index.html#contacto';
@@ -637,7 +908,7 @@ function irAContacto(seleccion, titulo) {
   btnReset.addEventListener('click', () => {
     Object.keys(build).forEach(k => build[k] = null);
     currentStepIndex = 0;
-    renderAll();
+    exitSearch();
   });
 
   renderAll();
