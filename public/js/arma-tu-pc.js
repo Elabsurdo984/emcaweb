@@ -263,6 +263,9 @@ function irAContacto(seleccion, titulo) {
       document.getElementById(t.getAttribute("aria-controls")).hidden = !selected;
     });
     tab.focus();
+    if (typeof window.updateMobileBarVisibility === 'function') {
+      window.updateMobileBarVisibility();
+    }
   }
 
   tabs.forEach((tab, i) => {
@@ -338,6 +341,21 @@ function irAContacto(seleccion, titulo) {
   const searchInput = document.getElementById("cfg-search-input");
   const searchClearBtn = document.getElementById("cfg-search-clear");
   const filterBtns = document.querySelectorAll(".cfg-filter-btn");
+
+  // Elementos de la barra flotante y drawer móvil
+  const mobileBar = document.getElementById("cfg-mobile-bar");
+  const mobileTotal = document.getElementById("cfg-mobile-total");
+  const mobileCount = document.getElementById("cfg-mobile-count");
+  const btnOpenSummary = document.getElementById("cfg-mobile-open-summary");
+  const drawerBackdrop = document.getElementById("cfg-drawer-backdrop");
+  const drawer = document.getElementById("cfg-drawer");
+  const drawerCloseBtn = document.getElementById("cfg-drawer-close");
+  const drawerHandle = document.getElementById("cfg-drawer-handle");
+  const drawerBody = document.getElementById("cfg-drawer-body");
+  const drawerTotal = document.getElementById("cfg-drawer-total");
+  const drawerCount = document.getElementById("cfg-drawer-count");
+  const drawerConsultar = document.getElementById("cfg-drawer-consultar");
+  const drawerReset = document.getElementById("cfg-drawer-reset");
 
   if (!selectorsWrap) return;
 
@@ -963,12 +981,171 @@ function irAContacto(seleccion, titulo) {
     }
   }
 
+  function updateMobileBarVisibility() {
+    const manualPanel = document.getElementById("panel-manual");
+    if (!mobileBar) return;
+    if (manualPanel && !manualPanel.hidden) {
+      mobileBar.classList.add("is-visible");
+    } else {
+      mobileBar.classList.remove("is-visible");
+      closeDrawer();
+    }
+  }
+  window.updateMobileBarVisibility = updateMobileBarVisibility;
+
+  function openDrawer() {
+    if (!drawer || !drawerBackdrop) return;
+    drawerBackdrop.hidden = false;
+    drawer.hidden = false;
+    drawer.setAttribute("aria-hidden", "false");
+    void drawer.offsetWidth;
+    drawerBackdrop.classList.add("is-open");
+    drawer.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDrawer() {
+    if (!drawer || !drawerBackdrop) return;
+    drawerBackdrop.classList.remove("is-open");
+    drawer.classList.remove("is-open");
+    document.body.style.overflow = "";
+    setTimeout(() => {
+      drawerBackdrop.hidden = true;
+      drawer.hidden = true;
+      drawer.setAttribute("aria-hidden", "true");
+    }, 320);
+  }
+
+  function renderDrawer() {
+    const selectedKeys = Object.keys(build).filter(k => build[k] !== null);
+    const count = selectedKeys.length;
+
+    let total = 0;
+    selectedKeys.forEach(k => {
+      total += build[k].price;
+    });
+
+    const formattedTotal = money(total);
+
+    // Actualizar barra inferior flotante
+    if (mobileTotal) mobileTotal.textContent = formattedTotal;
+    if (mobileCount) {
+      mobileCount.textContent = count === 0 ? "0 componentes" : `${count} componente${count === 1 ? "" : "s"}`;
+    }
+
+    // Actualizar cabecera y total del drawer
+    if (drawerCount) drawerCount.textContent = `${count} componente${count === 1 ? "" : "s"}`;
+    if (drawerTotal) drawerTotal.textContent = formattedTotal;
+
+    const isComplete = checkCompatibility(build).isValid && build.cpu;
+    if (drawerConsultar) drawerConsultar.disabled = !isComplete;
+
+    if (drawerBody) {
+      if (count === 0) {
+        drawerBody.innerHTML = `
+          <div class="cfg-drawer__empty">
+            <p>Todavía no elegiste ningún componente.</p>
+            <small>Empezá seleccionando un procesador en la lista.</small>
+          </div>
+        `;
+        return;
+      }
+
+      const { errors, warnings } = checkCompatibility(build);
+      const badCats = new Set();
+      errors.forEach(e => (e.cats || []).forEach(c => badCats.add(c)));
+
+      let itemsHtml = '<div class="cfg-drawer__items">';
+      steps.forEach((cat, idx) => {
+        const comp = build[cat];
+        if (!comp) return;
+
+        let info = CATEGORY_INFO[cat];
+        if (cat === "storage2") info = { label: "Almacenamiento secundario", icon: "💾" };
+        const icon = info?.icon || "⚙️";
+        const label = info?.label || cat;
+        const incompatible = badCats.has(cat);
+
+        itemsHtml += `
+          <div class="cfg-drawer__item ${incompatible ? "cfg-drawer__item--error" : ""}">
+            <div class="cfg-drawer__item-main">
+              <span class="cfg-drawer__item-icon">${icon}</span>
+              <div class="cfg-drawer__item-info">
+                <span class="cfg-drawer__item-cat">${label}</span>
+                <span class="cfg-drawer__item-name">${escapeHtml(comp.name)}</span>
+                <span class="cfg-drawer__item-price">${money(comp.price)}</span>
+              </div>
+            </div>
+            <div class="cfg-drawer__item-actions">
+              <button type="button" class="cfg-drawer__btn-edit" data-drawer-jump="${idx}" title="Editar ${label}">
+                ✎
+              </button>
+              <button type="button" class="cfg-drawer__btn-remove" data-drawer-remove="${cat}" title="Quitar ${label}">
+                ✕
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      itemsHtml += "</div>";
+
+      // Estado de compatibilidad dentro del drawer
+      if (errors.length > 0) {
+        itemsHtml += `<div class="compat-status compat-status--error" style="margin-top: 1rem;">❌ Incompatibilidad detectada</div>`;
+        errors.forEach(err => {
+          itemsHtml += `<div class="compat-item compat-item--error">✖ ${escapeHtml(err.msg)}</div>`;
+        });
+      } else if (warnings.length > 0) {
+        itemsHtml += `<div class="compat-status compat-status--warning" style="margin-top: 1rem;">⚠️ Atención</div>`;
+        warnings.forEach(warn => {
+          itemsHtml += `<div class="compat-item compat-item--warning">⚠ ${escapeHtml(warn.msg)}</div>`;
+        });
+      } else if (build.cpu) {
+        itemsHtml += `<div class="compat-status compat-status--ok" style="margin-top: 1rem;">✅ Todo compatible</div>`;
+      }
+
+      // Consumo estimado en drawer
+      if (build.cpu || build.gpu) {
+        const watts = estimatePowerConsumption(build);
+        itemsHtml += `<div class="sidebar__wattage" style="margin-top: 0.75rem;">Consumo estimado: <strong>${watts}W</strong></div>`;
+      }
+
+      drawerBody.innerHTML = itemsHtml;
+
+      // Eventos dentro del drawer (saltar a editar o quitar)
+      drawerBody.querySelectorAll("[data-drawer-jump]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const stepIdx = parseInt(btn.dataset.drawerJump, 10);
+          if (!isNaN(stepIdx)) {
+            closeDrawer();
+            exitSearch();
+            currentStepIndex = stepIdx;
+            renderAll();
+            scrollToConfiguratorTop();
+          }
+        });
+      });
+
+      drawerBody.querySelectorAll("[data-drawer-remove]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const cat = btn.dataset.drawerRemove;
+          updateBuild(cat, null);
+          const catLabel = cat === "storage2" ? "Almacenamiento secundario" : (CATEGORY_INFO[cat]?.label || cat);
+          setStepNotice(`Quitaste el componente de: <strong>${catLabel}</strong>`);
+          renderAll();
+        });
+      });
+    }
+  }
+
   function renderAll() {
     updateRateBadgeUI();
     renderSelectors();
     renderSummary();
     renderCompat();
     renderTotal();
+    renderDrawer();
+    updateMobileBarVisibility();
   }
 
   // Eventos del buscador y filtros
@@ -1043,6 +1220,32 @@ function irAContacto(seleccion, titulo) {
     Object.keys(build).forEach(k => build[k] = null);
     currentStepIndex = 0;
     exitSearch();
+  });
+
+  // Eventos de la barra y drawer móvil
+  if (btnOpenSummary) btnOpenSummary.addEventListener("click", openDrawer);
+  if (drawerCloseBtn) drawerCloseBtn.addEventListener("click", closeDrawer);
+  if (drawerBackdrop) drawerBackdrop.addEventListener("click", closeDrawer);
+  if (drawerHandle) drawerHandle.addEventListener("click", closeDrawer);
+
+  if (drawerConsultar) {
+    drawerConsultar.addEventListener("click", () => {
+      closeDrawer();
+      btnConsultar.click();
+    });
+  }
+
+  if (drawerReset) {
+    drawerReset.addEventListener("click", () => {
+      btnReset.click();
+      closeDrawer();
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer && drawer.classList.contains("is-open")) {
+      closeDrawer();
+    }
   });
 
   renderAll();
