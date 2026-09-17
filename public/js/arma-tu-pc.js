@@ -12,60 +12,71 @@ const COMPONENTES = {
   cpu: {
     label: "Procesador (CPU)",
     niveles: [
-      { name: "AMD Ryzen 5 5500 (ejemplo)", price: 155000 },
-      { name: "AMD Ryzen 5 7600 (ejemplo)", price: 345000 },
-      { name: "AMD Ryzen 7 7800X3D (ejemplo)", price: 730000 },
+      { name: "AMD Ryzen 5 5500", priceUsd: 99, price: 155000 },
+      { name: "AMD Ryzen 5 7600", priceUsd: 221, price: 345000 },
+      { name: "AMD Ryzen 7 7800X3D", priceUsd: 468, price: 730000 },
     ],
   },
   gpu: {
     label: "Placa de video (GPU)",
     niveles: [
-      { name: "Gráficos integrados / Entrada básica (ejemplo)", price: 90000 },
-      { name: "NVIDIA RTX 4060 8GB (ejemplo)", price: 520000 },
-      { name: "NVIDIA RTX 5060 Ti 16GB (ejemplo)", price: 750000 },
+      { name: "Gráficos integrados / Entrada básica", priceUsd: 58, price: 90000 },
+      { name: "NVIDIA RTX 4060 8GB", priceUsd: 333, price: 520000 },
+      { name: "NVIDIA RTX 5060 Ti 16GB", priceUsd: 481, price: 750000 },
     ],
   },
   ram: {
     label: "Memoria RAM",
     niveles: [
-      { name: "8 GB DDR4 3200 MHz (ejemplo)", price: 48000 },
-      { name: "16 GB DDR5 6000 MHz (ejemplo)", price: 135000 },
-      { name: "32 GB DDR5 6000 MHz (ejemplo)", price: 225000 },
+      { name: "8 GB DDR4 3200 MHz", priceUsd: 31, price: 48000 },
+      { name: "16 GB DDR5 6000 MHz", priceUsd: 87, price: 135000 },
+      { name: "32 GB DDR5 6000 MHz", priceUsd: 144, price: 225000 },
     ],
   },
   almacenamiento: {
     label: "Almacenamiento",
     niveles: [
-      { name: "SSD 480 GB SATA (ejemplo)", price: 65000 },
-      { name: "SSD NVMe 1 TB (ejemplo)", price: 125000 },
-      { name: "SSD NVMe 2 TB (ejemplo)", price: 255000 },
+      { name: "SSD 480 GB SATA", priceUsd: 42, price: 65000 },
+      { name: "SSD NVMe 1 TB", priceUsd: 80, price: 125000 },
+      { name: "SSD NVMe 2 TB", priceUsd: 163, price: 255000 },
     ],
   },
   motherboard: {
     label: "Motherboard",
     niveles: [
-      { name: "A520M / H610M básica (ejemplo)", price: 105000 },
-      { name: "B650M / B760M (ejemplo)", price: 195000 },
-      { name: "B650M WiFi gama media-alta (ejemplo)", price: 255000 },
+      { name: "A520M / H610M básica", priceUsd: 67, price: 105000 },
+      { name: "B650M / B760M", priceUsd: 125, price: 195000 },
+      { name: "B650M WiFi gama media-alta", priceUsd: 163, price: 255000 },
     ],
   },
   fuente: {
     label: "Fuente de alimentación",
     niveles: [
-      { name: "550W 80 Plus Bronze (ejemplo)", price: 78000 },
-      { name: "650W 80 Plus Bronze (ejemplo)", price: 95000 },
-      { name: "850W 80 Plus Gold (ejemplo)", price: 195000 },
+      { name: "550W 80 Plus Bronze", priceUsd: 50, price: 78000 },
+      { name: "650W 80 Plus Bronze", priceUsd: 61, price: 95000 },
+      { name: "850W 80 Plus Gold", priceUsd: 125, price: 195000 },
     ],
   },
   gabinete: {
     label: "Gabinete",
     niveles: [
-      { name: "Gabinete Micro-ATX básico (ejemplo)", price: 115000 },
-      { name: "Gabinete con mesh y coolers (ejemplo)", price: 148000 },
-      { name: "Gabinete premium airflow (ejemplo)", price: 225000 },
+      { name: "Gabinete Micro-ATX básico", priceUsd: 74, price: 115000 },
+      { name: "Gabinete con mesh y coolers", priceUsd: 95, price: 148000 },
+      { name: "Gabinete premium airflow", priceUsd: 144, price: 225000 },
     ],
   },
 };
+
+function updateComponentesPrices(rate) {
+  if (typeof emcaCalcArs !== 'function') return;
+  Object.keys(COMPONENTES).forEach(cat => {
+    COMPONENTES[cat].niveles.forEach(niv => {
+      if (typeof niv.priceUsd === 'number') {
+        niv.price = emcaCalcArs(niv.priceUsd, rate);
+      }
+    });
+  });
+}
 
 const CATEGORIAS = Object.keys(COMPONENTES);
 
@@ -306,6 +317,12 @@ function irAContacto(seleccion, titulo) {
       irAContacto(seleccion, `Hola, quiero consultar este armado (${USOS[uso].label}):`);
     });
   });
+
+  window.addEventListener("emca:currency-updated", () => {
+    if (result.querySelector(".panel__actions")) {
+      form.dispatchEvent(new Event("submit"));
+    }
+  });
 })();
 
 /* MODO 2: selección manual (Wizard + Buscador) ---------------------------- */
@@ -316,12 +333,42 @@ function irAContacto(seleccion, titulo) {
   const totalWrap = document.querySelector("#cfg-total .sidebar__price");
   const btnConsultar = document.getElementById("cfg-consultar");
   const btnReset = document.getElementById("cfg-reset");
+  const rateBadge = document.getElementById("cfg-rate-badge");
 
   const searchInput = document.getElementById("cfg-search-input");
   const searchClearBtn = document.getElementById("cfg-search-clear");
   const filterBtns = document.querySelectorAll(".cfg-filter-btn");
 
   if (!selectorsWrap) return;
+
+  function updateRateBadgeUI() {
+    if (!rateBadge) return;
+    const curr = (typeof EMCA_CURRENCY !== 'undefined') ? EMCA_CURRENCY : { rate: 1560, source: 'fallback' };
+    const rate = curr.rate || 1560;
+    const isLive = curr.source === 'dolarapi' || curr.source === 'criptoya';
+    const sourceLabel = isLive ? 'Actualizado en vivo' : (curr.source === 'cache' ? 'En vivo (en caché)' : 'Referencia');
+    rateBadge.innerHTML = `
+      <span class="rate-dot ${isLive || curr.source === 'cache' ? 'rate-dot--live' : ''}"></span>
+      <span class="rate-text">Dólar ref: <strong>$${money(rate).replace('$', '')}</strong> <small>(${sourceLabel})</small></span>
+    `;
+    rateBadge.title = `Precios en base a la cotización del dólar ($${money(rate).replace('$', '')} ARS).`;
+  }
+
+  window.addEventListener('emca:currency-updated', (e) => {
+    const rate = e.detail?.rate;
+    if (rate) {
+      if (typeof updateComponentesPrices === 'function') {
+        updateComponentesPrices(rate);
+      }
+      Object.keys(build).forEach(k => {
+        if (build[k] && typeof build[k].priceUsd === 'number' && typeof emcaCalcArs === 'function') {
+          build[k].price = emcaCalcArs(build[k].priceUsd, rate);
+        }
+      });
+      updateRateBadgeUI();
+      renderAll();
+    }
+  });
 
   const build = {
     cpu: null, motherboard: null, ram: null, gpu: null,
@@ -677,6 +724,10 @@ function irAContacto(seleccion, titulo) {
   }
 
   function updateBuild(cat, component) {
+    if (component && typeof component.priceUsd === 'number' && typeof emcaCalcArs === 'function') {
+      const currentRate = (typeof EMCA_CURRENCY !== 'undefined' && EMCA_CURRENCY.rate) ? EMCA_CURRENCY.rate : 1560;
+      component.price = emcaCalcArs(component.priceUsd, currentRate);
+    }
     build[cat] = component;
 
     if (cat === 'cpu' && component) {
@@ -831,6 +882,7 @@ function irAContacto(seleccion, titulo) {
   }
 
   function renderAll() {
+    updateRateBadgeUI();
     renderSelectors();
     renderSummary();
     renderCompat();
