@@ -179,6 +179,23 @@ function emcaCalcArs(priceUsd, rate) {
   return Math.round(raw / 1000) * 1000;
 }
 
+function emcaUpdateBadgeUI() {
+  if (typeof document === 'undefined') return;
+  const badge = document.getElementById("cfg-rate-badge");
+  if (!badge) return;
+  const rate = EMCA_CURRENCY.rate || EMCA_CURRENCY.defaultRate;
+  const isLive = EMCA_CURRENCY.source === 'dolarapi' || EMCA_CURRENCY.source === 'criptoya';
+  const isCache = EMCA_CURRENCY.source === 'cache';
+  const sourceLabel = isLive ? 'Actualizado en vivo' : (isCache ? 'En vivo (en caché)' : 'Referencia');
+  const formattedRate = Number(rate).toLocaleString('es-AR');
+
+  badge.innerHTML = `
+    <span class="rate-dot ${isLive || isCache ? 'rate-dot--live' : ''}"></span>
+    <span class="rate-text">Cotización Dólar: <strong>$${formattedRate}</strong> <small>(${sourceLabel})</small></span>
+  `;
+  badge.title = `Precios en base a la cotización del dólar ($${formattedRate} ARS).`;
+}
+
 function emcaApplyCurrencyRate(rate) {
   if (!rate || isNaN(rate) || rate <= 0) return;
   EMCA_CURRENCY.rate = Math.round(rate);
@@ -192,6 +209,8 @@ function emcaApplyCurrencyRate(rate) {
       });
     });
   }
+
+  emcaUpdateBadgeUI();
 
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent('emca:currency-updated', {
@@ -287,6 +306,14 @@ if (typeof window !== 'undefined') {
   window.EMCA_CURRENCY = EMCA_CURRENCY;
   window.emcaCalcArs = emcaCalcArs;
   window.emcaApplyCurrencyRate = emcaApplyCurrencyRate;
+  window.emcaUpdateBadgeUI = emcaUpdateBadgeUI;
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', emcaUpdateBadgeUI);
+    } else {
+      emcaUpdateBadgeUI();
+    }
+  }
   emcaInitCurrency();
 }
 

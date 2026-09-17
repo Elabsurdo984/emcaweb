@@ -342,16 +342,30 @@ function irAContacto(seleccion, titulo) {
   if (!selectorsWrap) return;
 
   function updateRateBadgeUI() {
+    if (typeof emcaUpdateBadgeUI === 'function') {
+      emcaUpdateBadgeUI();
+      return;
+    }
     if (!rateBadge) return;
-    const curr = (typeof EMCA_CURRENCY !== 'undefined') ? EMCA_CURRENCY : { rate: 1560, source: 'fallback' };
-    const rate = curr.rate || 1560;
+    const curr = (typeof EMCA_CURRENCY !== 'undefined') ? EMCA_CURRENCY : { rate: 1555, source: 'fallback' };
+    const rate = curr.rate || 1555;
     const isLive = curr.source === 'dolarapi' || curr.source === 'criptoya';
-    const sourceLabel = isLive ? 'Actualizado en vivo' : (curr.source === 'cache' ? 'En vivo (en caché)' : 'Referencia');
+    const isCache = curr.source === 'cache';
+    const sourceLabel = isLive ? 'Actualizado en vivo' : (isCache ? 'En vivo (en caché)' : 'Referencia');
+    const formattedRate = Number(rate).toLocaleString('es-AR');
     rateBadge.innerHTML = `
-      <span class="rate-dot ${isLive || curr.source === 'cache' ? 'rate-dot--live' : ''}"></span>
-      <span class="rate-text">Dólar ref: <strong>$${money(rate).replace('$', '')}</strong> <small>(${sourceLabel})</small></span>
+      <span class="rate-dot ${isLive || isCache ? 'rate-dot--live' : ''}"></span>
+      <span class="rate-text">Cotización Dólar: <strong>$${formattedRate}</strong> <small>(${sourceLabel})</small></span>
     `;
-    rateBadge.title = `Precios en base a la cotización del dólar ($${money(rate).replace('$', '')} ARS).`;
+    rateBadge.title = `Precios en base a la cotización del dólar ($${formattedRate} ARS).`;
+  }
+
+  // Si la cotización ya se cargó antes de inicializar este script, sincronizar inmediatamente
+  if (typeof EMCA_CURRENCY !== 'undefined' && EMCA_CURRENCY.rate) {
+    if (typeof updateComponentesPrices === 'function') {
+      updateComponentesPrices(EMCA_CURRENCY.rate);
+    }
+    updateRateBadgeUI();
   }
 
   window.addEventListener('emca:currency-updated', (e) => {
