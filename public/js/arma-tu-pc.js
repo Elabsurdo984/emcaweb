@@ -398,6 +398,37 @@ function irAContacto(seleccion, titulo) {
   let currentStepIndex = 0;
   let searchQuery = "";
   let selectedFilterCat = "all";
+  let stepNotice = null;
+  let stepNoticeTimeout = null;
+
+  function setStepNotice(htmlMsg) {
+    stepNotice = htmlMsg;
+    if (stepNoticeTimeout) {
+      clearTimeout(stepNoticeTimeout);
+    }
+    stepNoticeTimeout = setTimeout(() => {
+      stepNotice = null;
+      const el = document.getElementById("wizard-step-notice");
+      if (el) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-6px)';
+        setTimeout(() => el.remove(), 300);
+      }
+    }, 4500);
+  }
+
+  function scrollToConfiguratorTop() {
+    const target = document.getElementById("cfg-search-container") || selectorsWrap;
+    if (!target) return;
+    const headerOffset = 85;
+    const elementPosition = target.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+      top: Math.max(0, offsetPosition),
+      behavior: "smooth"
+    });
+  }
 
   function isSearchActive() {
     return searchQuery.trim().length > 0 || (selectedFilterCat !== "all" && searchQuery.trim().length > 0);
@@ -573,8 +604,11 @@ function irAContacto(seleccion, titulo) {
 
         if (action === 'select' && comp) {
           updateBuild(cat, comp);
+          const catLabel = cat === 'storage2' ? 'Almacenamiento secundario' : (CATEGORY_INFO[cat]?.label || cat);
+          setStepNotice(`Elegiste <strong>${escapeHtml(comp.name)}</strong> (${catLabel})`);
         } else if (action === 'toggle' && comp) {
           updateBuild(cat, null);
+          setStepNotice(`Quitaste <strong>${escapeHtml(comp.name)}</strong>.`);
         }
         renderAll();
       });
@@ -609,10 +643,22 @@ function irAContacto(seleccion, titulo) {
 
     html += `
       <div class="wizard-header">
-        <h3>${info.label}</h3>
-        ${info.note ? `<span style="font-size: 0.85rem; color: var(--text-muted);">${info.note}</span>` : ''}
+        <div class="wizard-header__title-group">
+          <span class="wizard-header__step-badge">Paso ${currentStepIndex + 1} de ${steps.length}</span>
+          <h3>${info.label}</h3>
+        </div>
+        ${info.note ? `<span class="wizard-header__note">${info.note}</span>` : ''}
       </div>
     `;
+
+    if (stepNotice) {
+      html += `
+        <div class="wizard-step-notice" id="wizard-step-notice">
+          <span class="step-notice-icon">✔</span>
+          <div class="step-notice-content">${stepNotice}</div>
+        </div>
+      `;
+    }
 
     // Product Grid
     html += '<div class="product-grid">';
@@ -693,7 +739,11 @@ function irAContacto(seleccion, titulo) {
         const targetIdx = parseInt(btn.dataset.stepIdx, 10);
         if (!isNaN(targetIdx) && targetIdx !== currentStepIndex) {
           currentStepIndex = targetIdx;
+          const targetStep = steps[currentStepIndex];
+          const targetLabel = targetStep === 'storage2' ? 'Almacenamiento secundario' : (CATEGORY_INFO[targetStep]?.label || targetStep);
+          setStepNotice(`Pasaste a: <strong>${targetLabel}</strong>`);
           renderAll();
+          scrollToConfiguratorTop();
         }
       });
     });
@@ -710,8 +760,18 @@ function irAContacto(seleccion, titulo) {
         updateBuild(cat, selectedComponent);
         if (currentStepIndex < steps.length - 1) {
           currentStepIndex++;
+          const nextCat = steps[currentStepIndex];
+          const nextLabel = nextCat === 'storage2' ? 'Almacenamiento secundario' : (CATEGORY_INFO[nextCat]?.label || nextCat);
+          if (selectedComponent) {
+            setStepNotice(`Elegiste <strong>${escapeHtml(selectedComponent.name)}</strong>. Siguiente paso: <strong>${nextLabel}</strong>`);
+          } else {
+            setStepNotice(`Avanzaste a: <strong>${nextLabel}</strong>`);
+          }
+        } else {
+          setStepNotice(`¡Excelente! Completaste todos los pasos. Podés revisar tu armado en el resumen.`);
         }
         renderAll();
+        scrollToConfiguratorTop();
       });
     });
 
@@ -720,7 +780,11 @@ function irAContacto(seleccion, titulo) {
       btnPrev.addEventListener('click', () => {
         if (currentStepIndex > 0) {
           currentStepIndex--;
+          const prevCat = steps[currentStepIndex];
+          const prevLabel = prevCat === 'storage2' ? 'Almacenamiento secundario' : (CATEGORY_INFO[prevCat]?.label || prevCat);
+          setStepNotice(`Volviste a: <strong>${prevLabel}</strong>`);
           renderAll();
+          scrollToConfiguratorTop();
         }
       });
     }
@@ -731,7 +795,11 @@ function irAContacto(seleccion, titulo) {
         updateBuild(currentCategory, null);
         if (currentStepIndex < steps.length - 1) {
           currentStepIndex++;
+          const nextCat = steps[currentStepIndex];
+          const nextLabel = nextCat === 'storage2' ? 'Almacenamiento secundario' : (CATEGORY_INFO[nextCat]?.label || nextCat);
+          setStepNotice(`Paso omitido. Pasaste a: <strong>${nextLabel}</strong>`);
           renderAll();
+          scrollToConfiguratorTop();
         }
       });
     }
