@@ -47,13 +47,19 @@ document.querySelectorAll("[data-year]").forEach((el) => {
   const validators = {
     nombre: (v) => (v.trim().length < 2 ? "Ingresá tu nombre (mínimo 2 caracteres)." : ""),
     email: (v) =>
-      !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "Ingresá un email válido." : "",
-    telefono: (v) =>
-      v.trim().replace(/\D/g, "").length < 7 ? "Ingresá un teléfono válido." : "",
-    servicio: (v) => (v ? "" : "Elegí un tipo de servicio."),
+      v.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim())
+        ? "Revisá el email o dejalo vacío si preferís que te contactemos por teléfono."
+        : "",
+    telefono: (v) => {
+      const phone = v.trim();
+      const digits = phone.replace(/\D/g, "");
+      return !/^\+?[\d\s().-]+$/.test(phone) || digits.length < 10 || digits.length > 15
+        ? "Ingresá un teléfono con código de área, por ejemplo: 11 5555-1234."
+        : "";
+    },
     mensaje: (v) =>
-      v.trim().length < 10
-        ? "Contanos un poco más (mínimo 10 caracteres)."
+      !v.trim()
+        ? "Contanos qué le pasa a tu equipo o qué necesitás."
         : v.trim().length > 1000
           ? "El mensaje no puede superar los 1000 caracteres."
           : "",
@@ -97,10 +103,17 @@ document.querySelectorAll("[data-year]").forEach((el) => {
     submitBtn.textContent = "Enviando...";
 
     try {
+      const data = new FormData(form);
+      ["nombre", "telefono", "email", "mensaje"].forEach((name) => {
+        data.set(name, data.get(name).trim());
+      });
+      // El email es opcional; si está vacío, no se envía como dirección de respuesta.
+      if (!data.get("email")) data.delete("email");
+
       const response = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
-        body: new FormData(form),
+        body: data,
       });
 
       if (!response.ok) throw new Error("Respuesta no exitosa del servidor");

@@ -274,13 +274,19 @@ main {
 .hero h1 {
   color: var(--white);
   font-size: clamp(2.1rem, 5vw, 3.4rem);
-  max-width: 18ch;
+  max-width: 24ch;
 }
 .hero__sub {
   margin-top: var(--space-4);
   max-width: 62ch;
   color: #c9d7e8;
   font-size: 1.06rem;
+}
+.hero__coverage {
+  margin-top: var(--space-4);
+  max-width: 62ch;
+  color: #c9d7e8;
+  font-size: 1rem;
 }
 .hero__actions {
   display: flex;
@@ -343,10 +349,12 @@ main {
 /* Servicios -------------------------------------------------------------- */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: var(--space-5);
 }
 .card {
+  display: flex;
+  flex-direction: column;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -373,6 +381,19 @@ main {
 }
 .card h3 {
   font-size: 1.1rem;
+}
+.card__description {
+  margin-top: var(--space-3);
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+.card__actions {
+  margin-top: auto;
+  padding-top: var(--space-5);
+}
+.card__actions .btn {
+  width: 100%;
+  text-align: center;
 }
 .card__list {
   margin-top: var(--space-3);
@@ -444,8 +465,10 @@ main {
   margin-top: var(--space-3);
 }
 .prices__note {
+  display: grid;
+  gap: var(--space-3);
   margin-top: var(--space-5);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
 }
 
@@ -484,6 +507,11 @@ main {
 .field {
   display: grid;
   gap: var(--space-2);
+}
+.form__help,
+.form .field__hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
 }
 .field label {
   font-size: 0.88rem;

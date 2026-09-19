@@ -230,7 +230,7 @@ function renderArmado(seleccion, { presupuesto } = {}) {
       ${diffHtml}
     </div>
     <p class="build-item__tier" style="margin-top:1rem">
-      Precios orientativos de ejemplo. Se confirman en el diagnóstico.
+      Precios orientativos de ejemplo. Se confirman en el presupuesto.
     </p>`;
 }
 
@@ -1250,4 +1250,3 @@ function irAContacto(seleccion, titulo) {
 
   renderAll();
 })();
-
