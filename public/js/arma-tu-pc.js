@@ -101,6 +101,17 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     storage: null, storage2: null, psu: null, pccase: null,
     cooler: null, fans: null, wifi: null, os: null
   };
+  let recommendation = null;
+  const recommendationNote = document.getElementById('cfg-recommendation-note');
+
+  function buildTotal() {
+    return Object.values(build).reduce((sum, piece) => sum + (piece?.price || 0), 0) + (recommendation?.assembly || 0);
+  }
+
+  function isBuildComplete() {
+    const required = CATEGORY_ORDER.filter(cat => CATEGORY_INFO[cat].required);
+    return required.every(cat => build[cat]) && checkCompatibility(build).isValid;
+  }
   
   const steps = [...CATEGORY_ORDER];
   const storageIdx = steps.indexOf('storage');
@@ -112,6 +123,26 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
   let selectedFilterCat = "all";
   let stepNotice = null;
   let stepNoticeTimeout = null;
+
+  window.addEventListener('emca:edit-recommendation', event => {
+    const incoming = event.detail;
+    if (!incoming?.components) return;
+    // Reemplazar todas las categorías juntas evita los borrados en cascada de
+    // updateBuild y que queden extras de una configuración manual anterior.
+    Object.keys(build).forEach(cat => {
+      const dbCat = cat === 'storage2' ? 'storage' : cat;
+      const piece = PC_DB[dbCat]?.find(p => p.id === incoming.components[cat]);
+      build[cat] = piece ? { ...piece } : null;
+    });
+    recommendation = { budget: incoming.budget, reserve: incoming.reserve, assembly: incoming.assembly, goal: incoming.goal };
+    currentStepIndex = Math.max(0, steps.indexOf(incoming.category));
+    closeDrawer();
+    document.getElementById('tab-manual').click();
+    setStepNotice('Cargamos la PC recomendada. Podés cambiar cualquier pieza desde el resumen o las categorías.');
+    exitSearch();
+    selectorsWrap.querySelector('.wizard-step--active')?.focus({ preventScroll: true });
+    scrollToConfiguratorTop();
+  });
 
   function setStepNotice(htmlMsg) {
     stepNotice = htmlMsg;
@@ -528,7 +559,8 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
       if (build.motherboard && build.motherboard.socket !== component.socket) {
         build.motherboard = null;
       }
-      if (build.ram && build.motherboard && build.motherboard.ramType !== build.ram.type) {
+      if (build.ram && ((build.motherboard && build.motherboard.ramType !== build.ram.type) ||
+          (component.ramType !== 'DDR4/DDR5' && component.ramType !== build.ram.type))) {
         build.ram = null;
       }
     } else if (cat === 'motherboard' && component) {
@@ -642,14 +674,16 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
   }
 
   function renderTotal() {
-    let total = 0;
-    Object.values(build).forEach(comp => {
-      if (comp) total += comp.price;
-    });
+    const total = buildTotal();
     totalWrap.textContent = money(total);
-
-    const isComplete = checkCompatibility(build).isValid && build.cpu;
-    btnConsultar.disabled = !isComplete;
+    if (recommendationNote) {
+      recommendationNote.hidden = !recommendation;
+      if (recommendation) {
+        const left = recommendation.budget - recommendation.reserve - total;
+        recommendationNote.textContent = `Estás editando la PC recomendada. El total incluye armado desde ${money(recommendation.assembly)}. Tu máximo: ${money(recommendation.budget)}; reservado para extras: ${money(recommendation.reserve)}. ${left >= 0 ? `Quedan ${money(left)} disponibles.` : `Te pasás ${money(-left)} del monto disponible para la PC.`}${isBuildComplete() ? '' : ' Faltan piezas obligatorias o hay incompatibilidades: completá la selección antes de consultar.'}`;
+      }
+    }
+    btnConsultar.disabled = !isBuildComplete();
   }
 
   function updateFilterButtonsUI() {
@@ -714,10 +748,7 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     const selectedKeys = Object.keys(build).filter(k => build[k] !== null);
     const count = selectedKeys.length;
 
-    let total = 0;
-    selectedKeys.forEach(k => {
-      total += build[k].price;
-    });
+    const total = buildTotal();
 
     const formattedTotal = money(total);
 
@@ -731,7 +762,7 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     if (drawerCount) drawerCount.textContent = `${count} componente${count === 1 ? "" : "s"}`;
     if (drawerTotal) drawerTotal.textContent = formattedTotal;
 
-    const isComplete = checkCompatibility(build).isValid && build.cpu;
+    const isComplete = isBuildComplete();
     if (drawerConsultar) drawerConsultar.disabled = !isComplete;
 
     if (drawerBody) {
@@ -892,19 +923,22 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
   });
 
   btnConsultar.addEventListener('click', () => {
+    if (!isBuildComplete()) return;
     let text = 'Hola, quiero consultar este armado que configuré:\n\n';
+    if (recommendation) {
+      text = `Hola, edité la PC recomendada para: ${recommendation.goal}.\nMáximo: ${money(recommendation.budget)}. Reserva extras: ${money(recommendation.reserve)}.\n`;
+    }
     steps.forEach(cat => {
       if (build[cat]) {
         let label = cat === 'storage2' ? 'Almacenamiento secundario' : CATEGORY_INFO[cat].label;
-        text += `- ${label}: ${build[cat].name}\n`;
+        text += recommendation ? `- ${build[cat].name}\n` : `- ${label}: ${build[cat].name}\n`;
       }
     });
     
-    let total = 0;
-    Object.values(build).forEach(comp => {
-      if (comp) total += comp.price;
-    });
-    text += `\nTotal estimado: ${money(total)}`;
+    const total = buildTotal();
+    text += recommendation
+      ? `\nTotal orientativo: ${money(total)} (incluye armado desde ${money(recommendation.assembly)}).`
+      : `\nTotal estimado: ${money(total)}`;
 
     sessionStorage.setItem('emca-armado', text);
     window.location.href = 'index.html#contacto';
@@ -912,6 +946,7 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
 
   btnReset.addEventListener('click', () => {
     Object.keys(build).forEach(k => build[k] = null);
+    recommendation = null;
     currentStepIndex = 0;
     exitSearch();
   });

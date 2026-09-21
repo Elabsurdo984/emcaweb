@@ -94,7 +94,8 @@
         <div class="auto-saving"><strong>${r.savings > 0 ? `Podés guardar ${money(r.savings)}` : 'Entra justo en tu presupuesto'}</strong><p>Elegimos la combinación de menor costo que cumple este perfil entre las opciones evaluadas del catálogo. No agregamos mejoras solo para gastar el resto.</p></div>
         <ul class="build-list">${Object.entries(b).filter(([, p]) => p).map(([cat, p]) => `
           <li class="build-item"><div><p class="build-item__cat">${escape(CATEGORY_INFO[cat].label)}</p>
-          <p class="build-item__name">${escape(p.name)}</p><p class="build-item__tier">${escape(why[cat])}</p></div>
+          <p class="build-item__name">${escape(p.name)}</p><p class="build-item__tier">${escape(why[cat])}</p>
+          <button class="auto-edit-piece" type="button" data-edit-category="${cat}" aria-label="Cambiar pieza: ${escape(CATEGORY_INFO[cat].label)}">Cambiar pieza</button></div>
           <p class="build-item__price">${p.price ? money(p.price) : 'Incluido'}</p></li>`).join('')}</ul>
         <div class="totals">
           <div class="totals__row"><span>Componentes</span><span>${money(r.proposal.parts)}</span></div>
@@ -108,8 +109,20 @@
         <p class="auto-note">Comprobamos plataforma, memoria, espacio para la placa de video y potencia según el catálogo. Al cotizar revisamos BIOS, conexiones, medidas y modelos exactos.</p>`;
     }
     html += `<p class="auto-note">Precios orientativos de ejemplo, convertidos a pesos con la cotización disponible; no son ofertas ni precios de tiendas en tiempo real. Confirmamos stock, precios y mano de obra antes de comprar. No incluye monitor, periféricos, licencias ni envío.</p>
-      <div class="panel__actions"><button class="btn btn--primary" type="button" id="auto-consultar">${r.proposal ? 'Consultar esta propuesta' : 'Pedir asesoramiento'}</button></div>`;
+      <div class="panel__actions"><button class="btn btn--primary" type="button" id="auto-consultar">${r.proposal ? 'Consultar esta propuesta' : 'Pedir asesoramiento'}</button>
+      ${r.proposal ? '<button class="btn btn--outline" type="button" data-edit-category="cpu">Editar esta PC</button>' : ''}</div>
+      ${r.proposal ? '<p class="auto-note">Al editar, cargamos esta propuesta completa en “Elijo yo cada pieza”. Reemplaza la selección manual anterior; después podés cambiar las piezas que quieras.</p>' : ''}`;
     result.innerHTML = html;
+    result.querySelectorAll('[data-edit-category]').forEach(button => {
+      button.addEventListener('click', () => {
+        window.dispatchEvent(new CustomEvent('emca:edit-recommendation', { detail: {
+          components: Object.fromEntries(Object.entries(r.proposal.build).map(([cat, piece]) => [cat, piece?.id || null])),
+          category: button.dataset.editCategory,
+          budget: r.budget, reserve: r.reserve, assembly: r.proposal.assembly,
+          goal: r.requested.label,
+        } }));
+      });
+    });
     document.getElementById('auto-consultar').addEventListener('click', () => {
       sessionStorage.setItem('emca-armado', consultation(r));
       window.location.href = 'index.html#contacto';

@@ -225,6 +225,8 @@
 .auto-note { margin-top: var(--space-4); color: var(--text-muted); font-size: 0.85rem; }
 #auto-form select { width: 100%; }
 #auto-result .build-item__tier { margin-top: var(--space-2); }
+.auto-edit-piece { color: var(--navy-900); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; padding-block: var(--space-2); }
+.auto-edit-piece:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
 @media (max-width: 480px) {
   #panel-auto .panel { padding: var(--space-4); }
   #auto-result .build-item { grid-template-columns: 1fr; gap: var(--space-1); }
