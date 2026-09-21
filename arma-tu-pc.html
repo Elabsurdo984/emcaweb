@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="public/css/reset.css" />
     <link rel="stylesheet" href="public/css/variables.css" />
     <link rel="stylesheet" href="public/css/styles.css" />
-    <link rel="stylesheet" href="public/css/arma-tu-pc.css?v=4" />
+    <link rel="stylesheet" href="public/css/arma-tu-pc.css?v=5" />
   </head>
   <body>
     <a class="skip-link" href="#main">Saltar al contenido principal</a>
@@ -115,6 +115,7 @@
             <div class="builder-grid">
               <form class="panel" id="auto-form">
                 <h2>Contanos qué necesitás</h2>
+                <p class="auto-intro">Tu presupuesto es un límite, no una meta. Buscamos una opción adecuada para tu uso y te mostramos lo que podés guardar.</p>
 
                 <fieldset style="border: 0; padding: 0">
                   <legend class="field" style="font-weight: 500; margin-bottom: 0.75rem">
@@ -124,29 +125,56 @@
                 </fieldset>
 
                 <div class="field">
-                  <label for="presupuesto">Presupuesto en pesos (ARS)</label>
+                  <label for="auto-goal">¿Qué querés hacer?</label>
+                  <select id="auto-goal" name="goal" aria-describedby="auto-goal-help"></select>
+                  <p class="field__hint" id="auto-goal-help"></p>
+                </div>
+
+                <div class="field">
+                  <label for="presupuesto">¿Cuánto podés gastar como máximo? (ARS)</label>
                   <input
                     id="presupuesto"
                     name="presupuesto"
                     type="number"
-                    min="150000"
-                    step="10000"
+                    min="1"
+                    max="1000000000"
+                    step="1"
                     value="900000"
+                    aria-describedby="auto-budget-help error-presupuesto"
                     required
                   />
+                  <p class="field__hint" id="auto-budget-help">Calculamos la torre y el armado desde $15.000. Monitor, teclado, mouse, licencias y envío se cotizan aparte.</p>
                   <p class="field__error" id="error-presupuesto" role="alert"></p>
                 </div>
 
+                <details class="auto-options">
+                  <summary>Ajustar espacio, Wi-Fi y dinero para extras</summary>
+                  <div class="field">
+                    <label for="auto-storage">Espacio para programas y archivos</label>
+                    <select id="auto-storage" name="storage">
+                      <option value="0">El necesario para mi uso</option>
+                      <option value="1000">Al menos 1 TB</option>
+                      <option value="2000">Al menos 2 TB</option>
+                    </select>
+                  </div>
+                  <label class="auto-check"><input type="checkbox" id="auto-wifi" name="wifi" /> Necesito conectarme por Wi-Fi</label>
+                  <div class="field">
+                    <label for="auto-reserve">Plata que querés separar para extras (ARS)</label>
+                    <input id="auto-reserve" name="reserve" type="number" min="0" step="1" value="0" aria-describedby="auto-reserve-help" />
+                    <p class="field__hint" id="auto-reserve-help">La descontamos del máximo antes de elegir la PC. Podés reservar para monitor, periféricos, licencia o envío.</p>
+                  </div>
+                </details>
                 <div class="panel__actions">
-                  <button class="btn btn--primary" type="submit">Recomendarme un armado</button>
+                  <button class="btn btn--primary" type="submit">Buscar una opción conveniente</button>
                 </div>
               </form>
 
               <div class="panel" id="auto-result" aria-live="polite">
                 <h2>Tu armado recomendado</h2>
                 <p class="result-empty">
-                  Elegí un uso y tu presupuesto para ver la recomendación.
+                  Elegí tu uso, qué necesitás hacer y tu presupuesto. Te explicamos qué elegir y dónde conviene ahorrar.
                 </p>
+                <p class="auto-note">¿Ya tenés una computadora? Consultanos antes de comprar: mejorar la que tenés puede salir menos que armar una nueva.</p>
               </div>
             </div>
           </div>
@@ -323,6 +351,8 @@
     <script src="public/js/main.js?v=4" defer></script>
     <script src="public/js/pc-components-db.js?v=4" defer></script>
     <script src="public/js/pc-compatibility.js?v=4" defer></script>
-    <script src="public/js/arma-tu-pc.js?v=4" defer></script>
+    <script src="public/js/pc-recommender.js?v=1" defer></script>
+    <script src="public/js/pc-recommendation-ui.js?v=1" defer></script>
+    <script src="public/js/arma-tu-pc.js?v=5" defer></script>
   </body>
 </html>

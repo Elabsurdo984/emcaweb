@@ -209,6 +209,28 @@
   gap: var(--space-3);
 }
 
+/* Recomendación según necesidad ------------------------------------------ */
+.builder-grid > .panel { min-width: 0; }
+.auto-intro { margin-bottom: var(--space-5); color: var(--text-muted); }
+.auto-options { margin-top: var(--space-4); border-top: 1px solid var(--border); padding-top: var(--space-4); }
+.auto-options summary { cursor: pointer; font-weight: 600; padding-block: var(--space-2); }
+.auto-options .field { margin-top: var(--space-4); }
+.auto-check { display: flex; align-items: center; gap: var(--space-3); margin-block: var(--space-4); cursor: pointer; }
+.auto-check input { width: 20px; height: 20px; flex-shrink: 0; }
+.auto-kicker { color: var(--accent); font-size: 0.75rem; letter-spacing: 0.08em; font-weight: 600; margin-bottom: var(--space-2); }
+.auto-saving { background: #edf7f1; border: 1px solid #b5d8c3; border-radius: var(--radius-sm); padding: var(--space-4); margin-block: var(--space-5); }
+.auto-saving strong { display: block; color: #185c38; font-size: 1.15rem; margin-bottom: var(--space-2); }
+.auto-saving p, .auto-notice { font-size: 0.9rem; }
+.auto-notice { background: #fff5e5; border: 1px solid #e7c990; padding: var(--space-4); border-radius: var(--radius-sm); margin-bottom: var(--space-4); color: #6b430c; }
+.auto-note { margin-top: var(--space-4); color: var(--text-muted); font-size: 0.85rem; }
+#auto-form select { width: 100%; }
+#auto-result .build-item__tier { margin-top: var(--space-2); }
+@media (max-width: 480px) {
+  #panel-auto .panel { padding: var(--space-4); }
+  #auto-result .build-item { grid-template-columns: 1fr; gap: var(--space-1); }
+  #auto-result .totals__row { flex-wrap: wrap; }
+}
+
 /* Configurador Manual - Wizard ------------------------------------------- */
 .configurator {
   display: grid;
