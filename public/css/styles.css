@@ -912,6 +912,87 @@ main {
   background: var(--accent);
 }
 
+/* Zonas de cobertura (Local SEO) ---------------------------------------- */
+.coverage__grid {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+}
+
+.coverage__card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.coverage__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.coverage__card--highlight {
+  background: linear-gradient(180deg, #f8faff 0%, #edf3fc 100%);
+  border-color: rgba(30, 144, 255, 0.3);
+}
+
+.coverage__icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-3);
+  line-height: 1;
+}
+
+.coverage__card h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-2);
+  color: var(--navy-900);
+}
+
+.coverage__card p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.coverage__list {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  font-size: 0.92rem;
+  color: var(--text);
+  flex-grow: 1;
+}
+
+.coverage__list li {
+  position: relative;
+  padding-left: 1.25rem;
+  line-height: 1.45;
+}
+
+.coverage__list li::before {
+  content: "•";
+  position: absolute;
+  left: 0.25rem;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.coverage__badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--electric-soft);
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
 /* WhatsApp flotante ------------------------------------------------------ */
 .wa-float {
   position: fixed;
