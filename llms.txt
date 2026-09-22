@@ -1,0 +1,40 @@
+# EMCA System - Servicio Técnico y Reparación de Computadoras
+
+> Servicio técnico especializado en reparación de computadoras, armado de PC gamer y de oficina, diagnóstico, cambio de pasta térmica, optimización de sistemas y software de celulares en Buenos Aires (AMBA, CABA y Gran Buenos Aires).
+
+## Información General
+- **Nombre:** EMCA System
+- **Ubicación:** Buenos Aires, Argentina
+- **Zona de Cobertura:** Ciudad Autónoma de Buenos Aires (CABA) y Gran Buenos Aires (Zona Norte, Zona Oeste, Zona Sur).
+- **Sitio web:** https://emcasystem.com.ar/
+- **Configurador de PC en vivo:** https://emcasystem.com.ar/arma-tu-pc.html
+- **Contacto WhatsApp:** +54 9 11 2469-2474 (https://wa.me/5491124692474)
+- **Email:** systememca@gmail.com
+- **Instagram:** @emca.system (https://www.instagram.com/emca.system/)
+
+## Servicios Principales
+1. **Reparación de Computadoras y Notebooks:**
+   - Equipos que no encienden, pantallas negras o reinicios constantes.
+   - Solución de problemas de hardware y software.
+   - Reemplazo y actualización a discos SSD de alta velocidad.
+2. **Diagnóstico Honesto y Transparente:**
+   - Consulta inicial por WhatsApp sin cargo.
+   - Diagnóstico desde $8.000 ARS (si se acepta la reparación, se descuenta del total).
+   - Si no conviene reparar el equipo, se le informa al cliente con total sinceridad.
+3. **Mantenimiento Preventivo y Térmico:**
+   - Limpieza profunda de polvo interno y ventiladores.
+   - Cambio de pasta térmica de alto rendimiento (DeepCool, Arctic, Thermal Grizzly).
+   - Control de temperaturas y pruebas de estrés bajo carga.
+4. **Armado y Configuración de PC a Medida:**
+   - Ensamble profesional con gestión prolija de cables.
+   - Configurador interactivo con compatibilidad automática en https://emcasystem.com.ar/arma-tu-pc.html.
+   - Instalación de sistema operativo (Windows / Linux), drivers actualizados y programas básicos.
+5. **Software para Celulares:**
+   - Asistencia en problemas del sistema operativo, errores de aplicaciones, reinicios o configuración (solo software, no reparaciones físicas).
+6. **Limpieza de Teclados:**
+   - Desarme, remoción de suciedad y desinfección de teclados mecánicos y de membrana.
+
+## Garantía y Confianza
+- **Garantía escrita:** Todos los trabajos cuentan con garantía de servicio.
+- **Atención personalizada:** El cliente habla directamente con el técnico a cargo de su equipo.
+- **Modalidad ágil:** Coordinación directa por WhatsApp con puntos de entrega y retiro según conveniencia en CABA y GBA.
