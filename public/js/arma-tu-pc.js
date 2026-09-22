@@ -284,11 +284,21 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     `;
 
     if (results.length === 0) {
+      const waText = searchQuery.trim()
+        ? `Hola EMCA, estoy armando mi PC y busco este componente que no encontré en la lista: ${encodeURIComponent(searchQuery.trim())}`
+        : 'Hola EMCA, estoy armando mi PC y quería consultar por un componente especial:';
       html += `
         <div class="search-empty">
+          <div class="search-empty__icon" aria-hidden="true">🔍</div>
           <h4>No se encontraron componentes</h4>
           <p>No encontramos resultados con los criterios ingresados.</p>
-          <p style="margin-top: 0.5rem; font-size: 0.85rem;">Probá buscando por marca (AMD, Intel, Kingston, Corsair), modelo (RTX, Ryzen, B550) o capacidad (1TB, 16GB).</p>
+          <div class="search-empty__custom-box">
+            <p><strong>¿Buscás una marca o modelo especial?</strong></p>
+            <p>Si querés un componente específico que no figura en la lista, podés consultárnoslo por mensaje y te lo cotizamos a medida.</p>
+            <a href="https://wa.me/5491124692474?text=${waText}" target="_blank" rel="noopener" class="btn btn--primary btn--sm search-empty__wa-btn">
+              Consultar componente por mensaje 💬
+            </a>
+          </div>
           <button type="button" class="btn btn--outline" id="btn-clear-search-empty" style="margin-top: 1rem;">Limpiar búsqueda</button>
         </div>
       `;
@@ -332,6 +342,12 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
       `;
     });
     html += '</div>';
+
+    html += `
+      <div class="cfg-search-footer-prompt">
+        <span>💡 ¿Buscás otro componente o marca que no figura acá? Podés <a href="https://wa.me/5491124692474?text=Hola%20EMCA%2C%20quer%C3%ADa%20consultar%20por%20un%20componente%20especial%20para%20mi%20PC%3A" target="_blank" rel="noopener">consultarnos por mensaje</a> y te lo cotizamos personalizado.</span>
+      </div>
+    `;
 
     selectorsWrap.innerHTML = html;
 
@@ -458,6 +474,18 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     }
 
     html += '</div>'; // close product-grid
+
+    html += `
+      <div class="cfg-step-custom-prompt">
+        <div class="cfg-step-custom-prompt__content">
+          <span class="cfg-step-custom-prompt__icon" aria-hidden="true">💡</span>
+          <span>¿Querés otra marca o modelo especial de <strong>${escapeHtml(info.label.toLowerCase())}</strong>?</span>
+        </div>
+        <a href="https://wa.me/5491124692474?text=Hola%20EMCA%2C%20estoy%20armando%20una%20PC%20y%20quer%C3%ADa%20consultar%20por%20un%20componente%20especial%20de%20${encodeURIComponent(info.label)}%3A" target="_blank" rel="noopener" class="cfg-step-custom-prompt__link">
+          Consultar por mensaje 💬
+        </a>
+      </div>
+    `;
 
     // Nav
     html += '<div class="wizard-nav">';
@@ -939,6 +967,8 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     text += recommendation
       ? `\nTotal orientativo: ${money(total)} (incluye armado desde ${money(recommendation.assembly)}).`
       : `\nTotal estimado: ${money(total)}`;
+
+    text += '\n\n(Aclaración: Si querés sumar o cambiar algún componente especial que no figuraba en la lista, podés escribirlo acá abajo).';
 
     sessionStorage.setItem('emca-armado', text);
     window.location.href = 'index.html#contacto';

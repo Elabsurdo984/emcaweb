@@ -44,6 +44,10 @@ const checkCompatibility = (build) => {
     errors.push({ msg: 'El tamaño de la motherboard (form factor) no es soportado por el gabinete', cats: ['motherboard', 'pccase'] });
   }
 
+  if (build.cpu && build.cooler && build.cooler.id !== 'cooler-stock' && Array.isArray(build.cooler.sockets) && !build.cooler.sockets.includes(build.cpu.socket)) {
+    errors.push({ msg: 'El cooler no es compatible con el socket del CPU', cats: ['cpu', 'cooler'] });
+  }
+
   if (build.motherboard && build.storage && build.storage.interface === 'NVMe M.2' && build.motherboard.m2Slots === 0) {
     errors.push({ msg: 'La unidad de almacenamiento NVMe M.2 requiere un slot M.2 en la motherboard', cats: ['storage', 'motherboard'] });
   }

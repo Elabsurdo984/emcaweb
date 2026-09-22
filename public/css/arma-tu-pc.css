@@ -349,6 +349,47 @@
   border-color: var(--navy-900);
 }
 
+/* Aviso de componentes especiales / personalizados */
+.cfg-custom-component-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.08), rgba(59, 130, 246, 0.04));
+  border: 1px solid rgba(30, 144, 255, 0.25);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.1rem;
+  margin-bottom: var(--space-4);
+  font-size: 0.88rem;
+  color: var(--navy-800, #1e293b);
+  line-height: 1.45;
+}
+
+.cfg-custom-component-banner__icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.cfg-custom-component-banner__text strong {
+  display: block;
+  color: var(--navy-900);
+  margin-bottom: 2px;
+  font-weight: 600;
+}
+
+.cfg-custom-component-banner__text a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.cfg-custom-component-banner__text a:hover {
+  color: var(--navy-900);
+}
+
 /* Resultados de búsqueda */
 .search-results-header {
   display: flex;
@@ -377,10 +418,41 @@
   border: 1px dashed var(--border);
   border-radius: var(--radius);
 }
+.search-empty__icon {
+  font-size: 2.2rem;
+  margin-bottom: var(--space-2);
+}
 .search-empty h4 {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--navy-900);
   margin-bottom: var(--space-2);
+}
+.search-empty__custom-box {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-3);
+  padding: var(--space-4);
+  background: rgba(30, 144, 255, 0.06);
+  border: 1px solid rgba(30, 144, 255, 0.2);
+  border-radius: var(--radius-sm);
+  max-width: 480px;
+  margin-inline: auto;
+  text-align: center;
+}
+.search-empty__custom-box p {
+  font-size: 0.88rem;
+  color: var(--navy-800);
+  margin-bottom: 0.4rem;
+}
+.search-empty__custom-box strong {
+  color: var(--navy-900);
+}
+.search-empty__wa-btn {
+  margin-top: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem;
 }
 
 .product-card__cat-tag {
@@ -865,6 +937,93 @@
 }
 .btn--outline:hover {
   background: var(--gray-100);
+}
+
+/* Prompts de componentes personalizados */
+.cfg-search-footer-prompt {
+  text-align: center;
+  padding: var(--space-4);
+  background: #f8fafc;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-4);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.cfg-search-footer-prompt a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.cfg-step-custom-prompt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-4);
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+.cfg-step-custom-prompt__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.cfg-step-custom-prompt__icon {
+  font-size: 1rem;
+}
+.cfg-step-custom-prompt__link {
+  color: var(--accent);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+.cfg-step-custom-prompt__link:hover {
+  text-decoration: underline;
+}
+
+.sidebar__special-box {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  margin-top: var(--space-2);
+  padding: 0.75rem;
+  background: rgba(30, 144, 255, 0.05);
+  border: 1px solid rgba(30, 144, 255, 0.15);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.sidebar__special-box strong {
+  color: var(--navy-900);
+}
+.sidebar__special-icon {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.drawer__special-box {
+  background: rgba(30, 144, 255, 0.06);
+  border: 1px solid rgba(30, 144, 255, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  font-size: 0.8rem;
+  color: var(--navy-800);
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+.drawer__special-box strong {
+  color: var(--navy-900);
 }
 
 .sidebar__disclaimer {
