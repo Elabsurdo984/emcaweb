@@ -30,4 +30,5 @@ User-agent: *
 Allow: /
 
 # Sitemap oficial
+Sitemap: https://emcasystem.com.ar/public/sitemap.xml
 Sitemap: https://emcasystem.com.ar/sitemap.xml
