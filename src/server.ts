@@ -57,6 +57,12 @@ export default {
       if (url.pathname === "/llms.txt") {
         return Response.redirect(new URL("/public/llms.txt", request.url).toString(), 301);
       }
+      if (url.pathname === "/favicon.ico") {
+        return Response.redirect(new URL("/public/favicon.ico", request.url).toString(), 301);
+      }
+      if (url.pathname === "/favicon.png") {
+        return Response.redirect(new URL("/public/favicon.png", request.url).toString(), 301);
+      }
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
