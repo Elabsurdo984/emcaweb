@@ -978,6 +978,7 @@ main {
   gap: var(--space-5);
   margin-top: var(--space-6);
   grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  align-items: stretch;
 }
 
 .coverage__card {
@@ -987,6 +988,7 @@ main {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition);
 }
@@ -998,15 +1000,16 @@ main {
 
 .coverage__card--highlight {
   background: linear-gradient(180deg, #f8faff 0%, #edf3fc 100%);
-  border-color: rgba(30, 144, 255, 0.35);
+  border-color: rgba(30, 144, 255, 0.45);
 }
 
 .coverage__media {
   position: relative;
   width: 100%;
-  height: 165px;
+  height: 175px;
   overflow: hidden;
   background: #0f172a;
+  flex-shrink: 0;
 }
 
 .coverage__media img {
@@ -1035,18 +1038,23 @@ main {
 }
 
 .coverage__icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: var(--electric-soft);
   color: var(--accent);
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
+.coverage__icon svg {
+  display: block;
+}
+
 .coverage__card h3 {
-  font-size: 1.25rem;
+  font-size: 1.22rem;
   margin-bottom: var(--space-2);
   color: var(--navy-900);
 }
@@ -1084,6 +1092,14 @@ main {
   font-weight: bold;
 }
 
+.coverage__footer {
+  margin-top: auto;
+  padding-top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
 .coverage__badge {
   display: inline-block;
   align-self: flex-start;
@@ -1093,6 +1109,11 @@ main {
   background: var(--electric-soft);
   padding: 4px 10px;
   border-radius: 9999px;
+}
+
+.coverage__footer .btn {
+  width: 100%;
+  text-align: center;
 }
 
 /* WhatsApp flotante ------------------------------------------------------ */
