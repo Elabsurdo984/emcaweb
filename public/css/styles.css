@@ -624,7 +624,7 @@ main {
 }
 .section__head h2 {
   font-size: clamp(1.7rem, 3.4vw, 2.3rem);
-  margin-top: var(--space-2);
+  margin-top: 0;
 }
 .section__head p {
   margin-top: var(--space-3);
