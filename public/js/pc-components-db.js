@@ -1,17 +1,17 @@
 const CATEGORY_ORDER = ['cpu', 'motherboard', 'ram', 'gpu', 'storage', 'psu', 'pccase', 'cooler', 'fans', 'wifi', 'os'];
 
 const CATEGORY_INFO = {
-  cpu: { label: 'Procesador (CPU)', icon: '🔲', required: true },
-  motherboard: { label: 'Motherboard', icon: '📋', required: true },
-  ram: { label: 'Memoria RAM', icon: '🧩', required: true },
-  gpu: { label: 'Placa de video (GPU)', icon: '🎮', required: false, note: 'No requerido si el CPU tiene gráficos integrados' },
-  storage: { label: 'Almacenamiento', icon: '💾', required: true },
-  psu: { label: 'Fuente de alimentación', icon: '⚡', required: true },
-  pccase: { label: 'Gabinete', icon: '🖥️', required: true },
-  cooler: { label: 'Cooler CPU', icon: '❄️', required: false, note: 'No requerido si el CPU incluye cooler' },
-  fans: { label: 'Ventiladores extra', icon: '🌀', optional: true },
-  wifi: { label: 'Adaptador WiFi / Bluetooth', icon: '📶', optional: true },
-  os: { label: 'Sistema operativo', icon: '💿', optional: true }
+  cpu: { label: 'Procesador (CPU)', required: true },
+  motherboard: { label: 'Motherboard', required: true },
+  ram: { label: 'Memoria RAM', required: true },
+  gpu: { label: 'Placa de video (GPU)', required: false, note: 'No requerido si el CPU tiene gráficos integrados' },
+  storage: { label: 'Almacenamiento', required: true },
+  psu: { label: 'Fuente de alimentación', required: true },
+  pccase: { label: 'Gabinete', required: true },
+  cooler: { label: 'Cooler CPU', required: false, note: 'No requerido si el CPU incluye cooler' },
+  fans: { label: 'Ventiladores extra', optional: true },
+  wifi: { label: 'Adaptador WiFi / Bluetooth', optional: true },
+  os: { label: 'Sistema operativo', optional: true }
 };
 
 const PC_DB = {

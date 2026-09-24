@@ -427,6 +427,43 @@ main {
   letter-spacing: 0.05em;
 }
 
+.hero__card-media {
+  position: relative;
+  width: 100%;
+  height: 155px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hero__card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hero__card:hover .hero__card-media img {
+  transform: scale(1.05);
+}
+
+.hero__card-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(10, 25, 47, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  letter-spacing: 0.03em;
+}
+
 .hero__card-body {
   display: flex;
   flex-direction: column;
@@ -443,11 +480,11 @@ main {
   width: 38px;
   height: 38px;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 144, 255, 0.16);
+  border: 1px solid rgba(147, 197, 253, 0.3);
   display: grid;
   place-items: center;
-  font-size: 1.15rem;
+  color: #7dd3fc;
   flex-shrink: 0;
 }
 
@@ -606,7 +643,7 @@ main {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: var(--space-5);
+  overflow: hidden;
   transition:
     border-color var(--transition),
     box-shadow var(--transition),
@@ -614,18 +651,41 @@ main {
 }
 .card:hover {
   border-color: rgba(30, 144, 255, 0.5);
-  box-shadow: var(--shadow);
-  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(15, 32, 56, 0.12);
+  transform: translateY(-4px);
+}
+.card__media {
+  position: relative;
+  width: 100%;
+  height: 175px;
+  overflow: hidden;
+  background: #0f172a;
+}
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card:hover .card__media img {
+  transform: scale(1.06);
+}
+.card__body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 .card__icon {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border-radius: 12px;
   background: var(--electric-soft);
   color: var(--accent);
   margin-bottom: var(--space-4);
+  flex-shrink: 0;
 }
 .card h3 {
   font-size: 1.1rem;
@@ -924,7 +984,7 @@ main {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: var(--space-6);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
@@ -932,25 +992,67 @@ main {
 }
 
 .coverage__card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(15, 32, 56, 0.12);
 }
 
 .coverage__card--highlight {
   background: linear-gradient(180deg, #f8faff 0%, #edf3fc 100%);
-  border-color: rgba(30, 144, 255, 0.3);
+  border-color: rgba(30, 144, 255, 0.35);
+}
+
+.coverage__media {
+  position: relative;
+  width: 100%;
+  height: 165px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.coverage__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.coverage__card:hover .coverage__media img {
+  transform: scale(1.06);
+}
+
+.coverage__body {
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.coverage__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
 }
 
 .coverage__icon {
-  font-size: 2rem;
-  margin-bottom: var(--space-3);
-  line-height: 1;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--electric-soft);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
 .coverage__card h3 {
   font-size: 1.25rem;
   margin-bottom: var(--space-2);
   color: var(--navy-900);
+}
+
+.coverage__header h3 {
+  margin-bottom: 0;
 }
 
 .coverage__card p {

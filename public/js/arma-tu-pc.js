@@ -210,14 +210,14 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     return '';
   }
 
-  function renderComponentImage(opt, cat) {
-    const dbCat = cat === 'storage2' ? 'storage' : cat;
-    const catIcon = (typeof CATEGORY_INFO !== 'undefined' && CATEGORY_INFO[dbCat] && CATEGORY_INFO[dbCat].icon) || '📦';
+  const hardwarePlaceholderSvg = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="product-card__placeholder-svg"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>';
+
+  function renderComponentImage(opt) {
     const hasImage = Boolean(opt.img && opt.img !== 'public/img/placeholder.jpg');
     if (hasImage) {
-      return `<img src="${opt.img}" alt="${escapeHtml(opt.name)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'product-card__placeholder\\'>${catIcon}</span>';" />`;
+      return `<img src="${opt.img}" alt="${escapeHtml(opt.name)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'product-card__placeholder\\'>${hardwarePlaceholderSvg}</span>';" />`;
     }
-    return `<span class="product-card__placeholder">${catIcon}</span>`;
+    return `<span class="product-card__placeholder">${hardwarePlaceholderSvg}</span>`;
   }
 
   function getTargetCategories(filter) {
@@ -289,14 +289,16 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
         : 'Hola EMCA, estoy armando mi PC y quería consultar por un componente especial:';
       html += `
         <div class="search-empty">
-          <div class="search-empty__icon" aria-hidden="true">🔍</div>
+          <div class="search-empty__icon" aria-hidden="true">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
           <h4>No se encontraron componentes</h4>
           <p>No encontramos resultados con los criterios ingresados.</p>
           <div class="search-empty__custom-box">
             <p><strong>¿Buscás una marca o modelo especial?</strong></p>
             <p>Si querés un componente específico que no figura en la lista, podés consultárnoslo por mensaje y te lo cotizamos a medida.</p>
             <a href="https://wa.me/5491124692474?text=${waText}" target="_blank" rel="noopener" class="btn btn--primary btn--sm search-empty__wa-btn">
-              Consultar componente por mensaje 💬
+              Consultar componente por mensaje
             </a>
           </div>
           <button type="button" class="btn btn--outline" id="btn-clear-search-empty" style="margin-top: 1rem;">Limpiar búsqueda</button>
@@ -315,23 +317,23 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
                          (cat === 'storage' && build.storage2 && build.storage2.id === comp.id);
       const compatible = isComponentCompatible(cat, comp);
       const specsHtml = getComponentSpecs(cat, comp);
-      const catInfo = CATEGORY_INFO[cat] || { label: cat, icon: '📦' };
+      const catInfo = CATEGORY_INFO[cat] || { label: cat };
 
       const compatBadge = compatible
-        ? '<span class="product-card__badge product-card__badge--ok">✔ Compatible</span>'
-        : '<span class="product-card__badge product-card__badge--error">✖ No compatible</span>';
+        ? '<span class="product-card__badge product-card__badge--ok">Compatible</span>'
+        : '<span class="product-card__badge product-card__badge--error">No compatible</span>';
 
       const btnHtml = isSelected
-        ? `<button type="button" class="btn btn--primary btn--selected" data-action="toggle" data-cat="${cat}" data-id="${comp.id}">Seleccionado ✓</button>`
+        ? `<button type="button" class="btn btn--primary btn--selected" data-action="toggle" data-cat="${cat}" data-id="${comp.id}">Seleccionado</button>`
         : `<button type="button" class="btn btn--primary btn--select-search" data-action="select" data-cat="${cat}" data-id="${comp.id}">Seleccionar</button>`;
 
       html += `
         <div class="product-card product-card--${compatible ? 'ok' : 'error'} ${isSelected ? 'product-card--selected' : ''}">
           <div class="product-card__img">
-            ${renderComponentImage(comp, cat)}
+            ${renderComponentImage(comp)}
           </div>
           <div class="product-card__info">
-            <span class="product-card__cat-tag">${catInfo.icon} ${catInfo.label}</span>
+            <span class="product-card__cat-tag">${catInfo.label}</span>
             <div class="product-card__name">${escapeHtml(comp.name)}</div>
             <div class="product-card__specs">${specsHtml}</div>
             ${compatBadge}
@@ -345,7 +347,7 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
 
     html += `
       <div class="cfg-search-footer-prompt">
-        <span>💡 ¿Buscás otro componente o marca que no figura acá? Podés <a href="https://wa.me/5491124692474?text=Hola%20EMCA%2C%20quer%C3%ADa%20consultar%20por%20un%20componente%20especial%20para%20mi%20PC%3A" target="_blank" rel="noopener">consultarnos por mensaje</a> y te lo cotizamos personalizado.</span>
+        <span>¿Buscás otro componente o marca que no figura acá? Podés <a href="https://wa.me/5491124692474?text=Hola%20EMCA%2C%20quer%C3%ADa%20consultar%20por%20un%20componente%20especial%20para%20mi%20PC%3A" target="_blank" rel="noopener">consultarnos por mensaje</a> y te lo cotizamos personalizado.</span>
       </div>
     `;
 
@@ -413,7 +415,9 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     if (stepNotice) {
       html += `
         <div class="wizard-step-notice" id="wizard-step-notice">
-          <span class="step-notice-icon">✔</span>
+          <span class="step-notice-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </span>
           <div class="step-notice-content">${stepNotice}</div>
         </div>
       `;
@@ -432,17 +436,17 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
       const specsHtml = getComponentSpecs(currentCategory, opt);
 
       const compatBadge = compatible
-        ? '<span class="product-card__badge product-card__badge--ok">✔ Compatible</span>'
-        : '<span class="product-card__badge product-card__badge--error">✖ No compatible</span>';
+        ? '<span class="product-card__badge product-card__badge--ok">Compatible</span>'
+        : '<span class="product-card__badge product-card__badge--error">No compatible</span>';
 
       const btnHtml = isSelected
-        ? `<button type="button" class="btn btn--primary btn--selected" data-cat="${currentCategory}" data-idx="${idx}">Seleccionado ✓</button>`
+        ? `<button type="button" class="btn btn--primary btn--selected" data-cat="${currentCategory}" data-idx="${idx}">Seleccionado</button>`
         : `<button type="button" class="btn btn--primary btn--select" data-cat="${currentCategory}" data-idx="${idx}">Seleccionar</button>`;
 
       html += `
         <div class="product-card product-card--${compatible ? 'ok' : 'error'} ${isSelected ? 'product-card--selected' : ''}">
           <div class="product-card__img">
-            ${renderComponentImage(opt, currentCategory)}
+            ${renderComponentImage(opt)}
           </div>
           <div class="product-card__info">
             <div class="product-card__name">${escapeHtml(opt.name)}</div>
@@ -461,7 +465,9 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
       html += `
         <div class="product-card">
           <div class="product-card__img">
-            <span class="product-card__placeholder">🚫</span>
+            <span class="product-card__placeholder">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="product-card__placeholder-svg"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+            </span>
           </div>
           <div class="product-card__info">
             <div class="product-card__name">Ninguno / Saltar</div>
@@ -478,11 +484,13 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     html += `
       <div class="cfg-step-custom-prompt">
         <div class="cfg-step-custom-prompt__content">
-          <span class="cfg-step-custom-prompt__icon" aria-hidden="true">💡</span>
+          <span class="cfg-step-custom-prompt__icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/></svg>
+          </span>
           <span>¿Querés otra marca o modelo especial de <strong>${escapeHtml(info.label.toLowerCase())}</strong>?</span>
         </div>
         <a href="https://wa.me/5491124692474?text=Hola%20EMCA%2C%20estoy%20armando%20una%20PC%20y%20quer%C3%ADa%20consultar%20por%20un%20componente%20especial%20de%20${encodeURIComponent(info.label)}%3A" target="_blank" rel="noopener" class="cfg-step-custom-prompt__link">
-          Consultar por mensaje 💬
+          Consultar por mensaje
         </a>
       </div>
     `;
@@ -619,12 +627,12 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
         hasAny = true;
         const incompatible = badCats.has(cat);
         const badge = incompatible
-          ? '<span class="sidebar__badge sidebar__badge--error" aria-label="No compatible">✖ No compatible</span>'
-          : '<span class="sidebar__badge sidebar__badge--ok" aria-label="Compatible">✔ Compatible</span>';
+          ? '<span class="sidebar__badge sidebar__badge--error" aria-label="No compatible">No compatible</span>'
+          : '<span class="sidebar__badge sidebar__badge--ok" aria-label="Compatible">Compatible</span>';
         html += `
           <div class="sidebar__item" style="cursor: pointer;" data-jump-step="${idx}" title="Hacer clic para editar ${info.label}">
             <div class="sidebar__item-info">
-              <span class="sidebar__item-cat">${info.label} ✎</span>
+              <span class="sidebar__item-cat">${info.label}</span>
               <span class="sidebar__item-name">${escapeHtml(comp.name)}</span>
               ${badge}
             </div>
@@ -673,23 +681,23 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
     let html = '';
 
     if (errors.length > 0) {
-      html += `<div class="compat-status compat-status--error">❌ Incompatible</div>`;
+      html += `<div class="compat-status compat-status--error">Incompatible</div>`;
       errors.forEach(err => {
-        html += `<div class="compat-item compat-item--error">✖ ${escapeHtml(err.msg)}</div>`;
+        html += `<div class="compat-item compat-item--error">${escapeHtml(err.msg)}</div>`;
       });
     }
 
     if (warnings.length > 0) {
       if (errors.length === 0) {
-        html += `<div class="compat-status compat-status--warning">⚠️ Atención</div>`;
+        html += `<div class="compat-status compat-status--warning">Atención</div>`;
       }
       warnings.forEach(warn => {
-        html += `<div class="compat-item compat-item--warning">⚠ ${escapeHtml(warn.msg)}</div>`;
+        html += `<div class="compat-item compat-item--warning">${escapeHtml(warn.msg)}</div>`;
       });
     }
 
     if (isValid && errors.length === 0 && warnings.length === 0 && build.cpu) {
-      html += `<div class="compat-status compat-status--ok">✅ Todo compatible</div>`;
+      html += `<div class="compat-status compat-status--ok">Todo compatible</div>`;
     }
 
     // Wattage
@@ -814,15 +822,13 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
         if (!comp) return;
 
         let info = CATEGORY_INFO[cat];
-        if (cat === "storage2") info = { label: "Almacenamiento secundario", icon: "💾" };
-        const icon = info?.icon || "⚙️";
+        if (cat === "storage2") info = { label: "Almacenamiento secundario" };
         const label = info?.label || cat;
         const incompatible = badCats.has(cat);
 
         itemsHtml += `
           <div class="cfg-drawer__item ${incompatible ? "cfg-drawer__item--error" : ""}">
             <div class="cfg-drawer__item-main">
-              <span class="cfg-drawer__item-icon">${icon}</span>
               <div class="cfg-drawer__item-info">
                 <span class="cfg-drawer__item-cat">${label}</span>
                 <span class="cfg-drawer__item-name">${escapeHtml(comp.name)}</span>
@@ -831,7 +837,7 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
             </div>
             <div class="cfg-drawer__item-actions">
               <button type="button" class="cfg-drawer__btn-edit" data-drawer-jump="${idx}" title="Editar ${label}">
-                ✎
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
               </button>
               <button type="button" class="cfg-drawer__btn-remove" data-drawer-remove="${cat}" title="Quitar ${label}">
                 ✕
@@ -844,17 +850,17 @@ const money = (n) => new Intl.NumberFormat("es-AR", { style: "currency", currenc
 
       // Estado de compatibilidad dentro del drawer
       if (errors.length > 0) {
-        itemsHtml += `<div class="compat-status compat-status--error" style="margin-top: 1rem;">❌ Incompatibilidad detectada</div>`;
+        itemsHtml += `<div class="compat-status compat-status--error" style="margin-top: 1rem;">Incompatibilidad detectada</div>`;
         errors.forEach(err => {
-          itemsHtml += `<div class="compat-item compat-item--error">✖ ${escapeHtml(err.msg)}</div>`;
+          itemsHtml += `<div class="compat-item compat-item--error">${escapeHtml(err.msg)}</div>`;
         });
       } else if (warnings.length > 0) {
-        itemsHtml += `<div class="compat-status compat-status--warning" style="margin-top: 1rem;">⚠️ Atención</div>`;
+        itemsHtml += `<div class="compat-status compat-status--warning" style="margin-top: 1rem;">Atención</div>`;
         warnings.forEach(warn => {
-          itemsHtml += `<div class="compat-item compat-item--warning">⚠ ${escapeHtml(warn.msg)}</div>`;
+          itemsHtml += `<div class="compat-item compat-item--warning">${escapeHtml(warn.msg)}</div>`;
         });
       } else if (build.cpu) {
-        itemsHtml += `<div class="compat-status compat-status--ok" style="margin-top: 1rem;">✅ Todo compatible</div>`;
+        itemsHtml += `<div class="compat-status compat-status--ok" style="margin-top: 1rem;">Todo compatible</div>`;
       }
 
       // Consumo estimado en drawer
