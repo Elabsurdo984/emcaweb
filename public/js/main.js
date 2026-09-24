@@ -6,7 +6,7 @@
 /* -----------------------------------------------------------------------
    CONFIGURACIÓN: reemplazar TU_ID_DE_FORMSPREE por el ID real del formulario
    creado en https://formspree.io (dashboard > New Form).
-   El mail de destino (systememca@gmail.com) se configura en el dashboard
+   El mail de destino (contacto@emcasystem.com.ar) se configura en el dashboard
    de Formspree, NO acá en el código.
    ----------------------------------------------------------------------- */
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrpzpkqe";
@@ -122,7 +122,7 @@ document.querySelectorAll("[data-year]").forEach((el) => {
       setStatus("¡Listo! Recibimos tu consulta y te respondemos a la brevedad.", "success");
     } catch (error) {
       setStatus(
-        "No pudimos enviar el formulario. Probá de nuevo o escribinos a systememca@gmail.com.",
+        "No pudimos enviar el formulario. Probá de nuevo o escribinos a contacto@emcasystem.com.ar.",
         "error",
       );
     } finally {
